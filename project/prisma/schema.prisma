@@ -10,48 +10,18 @@ datasource db {
 // Product related schemas
 
 model Product {
-  id             String           @id @default(auto()) @map("_id") @db.ObjectId
-  description    String
-  imageUrl       String
-  name           String
-  price          Int
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  CartItem       CartItem[]
-  ProductVariant ProductVariant[]
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  description String
+  imageUrl    String
+  name        String     @unique
+  price       Int
+  colors      String[]
+  sizes       String[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  cartItems   CartItem[]
 
   @@map("products")
-}
-
-model Size {
-  id              String           @id @default(auto()) @map("_id") @db.ObjectId
-  name            String
-  productVariants ProductVariant[] // Relation with ProductVariant model
-
-  @@map("sizes")
-}
-
-model Color {
-  id              String           @id @default(auto()) @map("_id") @db.ObjectId
-  name            String
-  code            String // For hex color code or specific color code
-  productVariants ProductVariant[] // Relation with ProductVariant model
-
-  @@map("colors")
-}
-
-model ProductVariant {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  product   Product @relation(fields: [productId], references: [id])
-  productId String  @db.ObjectId
-  size      Size    @relation(fields: [sizeId], references: [id])
-  sizeId    String  @db.ObjectId
-  color     Color   @relation(fields: [colorId], references: [id])
-  colorId   String  @db.ObjectId
-  quantity  Int // Quantity available for this specific variant
-
-  @@unique([productId, sizeId, colorId])
-  @@map("product_variants")
 }
 
 // Cart related schemas
