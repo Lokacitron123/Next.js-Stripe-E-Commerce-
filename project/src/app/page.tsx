@@ -1,5 +1,5 @@
 import Image from "next/image";
 
-export default function Home() {
-  return <main>Hello world</main>;
+export default function HomePage() {
+  return <main>Home</main>;
 }
