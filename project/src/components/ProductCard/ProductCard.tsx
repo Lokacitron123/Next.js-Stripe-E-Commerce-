@@ -13,9 +13,9 @@ const ProductCard = ({ product }: ProductCardProps) => {
       <Image
         src={product.defaultImg}
         alt={product.name}
-        width={800}
-        height={400}
-        className='h-48 object-cover'
+        width={500}
+        height={500}
+        className='rounded-lg'
       />
       <div className='card-body'>
         <h2 className='card-title'>{product.name}</h2>
