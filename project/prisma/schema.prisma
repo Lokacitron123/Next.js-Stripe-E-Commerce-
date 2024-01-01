@@ -10,18 +10,32 @@ datasource db {
 // Product related schemas
 
 model Product {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId
-  description String
-  imageUrl    String
-  name        String     @unique
-  price       Int
-  colors      String[]
-  sizes       String[]
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  cartItems   CartItem[]
+  id              String     @id @default(auto()) @map("_id") @db.ObjectId
+  description     String
+  name            String     @unique
+  price           Int
+  genderCategory  String
+  productCategory String
+  defaultImg      String
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  cartItems       CartItem[]
+  variant         Variant[]
+  review          Review[]
 
   @@map("products")
+}
+
+model Variant {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  image     String
+  color     String
+  size      String
+  quantity  Int
+  Product   Product @relation(fields: [productId], references: [id])
+  productId String  @db.ObjectId
+
+  @@map("variants")
 }
 
 // Cart related schemas
@@ -51,11 +65,13 @@ model CartItem {
 // User related schemas
 
 model Review {
-  id      String @id @default(auto()) @map("_id") @db.ObjectId
-  comment String
-  rating  Int
-  user    User   @relation(fields: [userId], references: [id])
-  userId  String @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  comment   String
+  rating    Int
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @db.ObjectId
+  Product   Product? @relation(fields: [productId], references: [id])
+  productId String?  @db.ObjectId
 
   @@map("reviews")
 }
