@@ -58,6 +58,11 @@ const SingleProductPage = async ({ params: { id } }: SingleProductProps) => {
         <h1 className='text-5xl font-bold'>{product.name}</h1>
         <p>{product.price}</p>
         <p>{product.description}</p>
+        {product.variant.map((variant, index) => (
+          <div key={index}>
+            <p>Color: {variant.color}</p>
+          </div>
+        ))}
       </div>
     </div>
   );

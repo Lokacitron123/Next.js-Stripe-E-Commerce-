@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import prisma from "@/utils/db/prisma";
 import { redirect } from "next/navigation";
+// import functions
 
 // Metadata for this page
 export const metadata: Metadata = {
@@ -8,8 +9,10 @@ export const metadata: Metadata = {
   description: "Are you not entertained?",
 };
 
-// Server action
-const addProduct = async (formData: FormData) => {
+// Server actions and forms
+// Documentation: https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations
+
+export const addProduct = async (formData: FormData) => {
   "use server";
 
   const name = formData.get("name")?.toString();
@@ -56,8 +59,9 @@ const addProduct = async (formData: FormData) => {
     },
   });
 
-  redirect("/");
+  redirect("/products");
 };
+
 const AddProductPage = () => {
   return (
     <div className='flex  items-center flex-col  '>
@@ -125,6 +129,7 @@ const AddProductPage = () => {
           required
           name='color'
         >
+          <option>White</option>
           <option>Red</option>
           <option>Yellow</option>
           <option>Green</option>
