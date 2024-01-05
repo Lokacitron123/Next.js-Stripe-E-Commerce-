@@ -1,6 +1,5 @@
 import ProductCard from "@/components/ProductCard/ProductCard";
 import prisma from "@/utils/db/prisma";
-
 import { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -13,8 +12,6 @@ const ProductsPage = async () => {
       variant: true,
     },
   });
-
-  console.log("logging products", products);
 
   return (
     <div className='flex flex-col items-center'>

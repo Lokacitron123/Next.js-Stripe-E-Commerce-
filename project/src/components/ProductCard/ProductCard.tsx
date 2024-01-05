@@ -3,11 +3,11 @@ import Image from "next/image";
 
 import { Product, Variant } from "@prisma/client";
 
-interface ProductCardProps {
+export interface ProductProps {
   product: Product & { variant: Variant[] };
 }
 
-const ProductCard = ({ product }: ProductCardProps) => {
+const ProductCard = ({ product }: ProductProps) => {
   return (
     <Link href={"/products/" + product.id}>
       <Image
