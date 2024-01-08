@@ -1,9 +1,10 @@
 import prisma from "@/utils/db/prisma";
-
 import { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { cache } from "react";
+import AddToCartBtn from "@/components/AddToCartBtn/AddToCartBtn";
+import incrementProductQuantityInCart from "./actions";
 
 // Get id out of the URL with params
 interface SingleProductProps {
@@ -63,6 +64,10 @@ const SingleProductPage = async ({ params: { id } }: SingleProductProps) => {
             <p>Color: {variant.color}</p>
           </div>
         ))}
+        <AddToCartBtn
+          productId={product.id}
+          incrementProductQuantityInCart={incrementProductQuantityInCart}
+        />
       </div>
     </div>
   );

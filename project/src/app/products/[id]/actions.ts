@@ -27,7 +27,7 @@ const incrementProductQuantityInCart = async (productId: string) => {
 
   // updates the url from this path
   // we update in order to see the changes
-  revalidatePath("/products/[id]");
+  revalidatePath("/products/[id]", "page");
 };
 
 export default incrementProductQuantityInCart;
