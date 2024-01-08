@@ -40,6 +40,10 @@ model Variant {
 
 // Cart related schemas
 
+// Cart is the model that holds all CartItems that is added by a user
+// Cart is linked to a user, but not required because a user that is not logged in will be able to create a cart
+// A cart created by a user that is not logged in will be stored in localStorage
+// When the user logs in and if there is a cart in localStorage, that cart can be used to populate a cart in the database for that particular user
 model Cart {
   id        String     @id @default(auto()) @map("_id") @db.ObjectId
   items     CartItem[]
@@ -51,6 +55,7 @@ model Cart {
   @@map("carts")
 }
 
+// A CartItem is an individual product item that goes into the Cart
 model CartItem {
   id        String  @id @default(auto()) @map("_id") @db.ObjectId
   productId String  @db.ObjectId
