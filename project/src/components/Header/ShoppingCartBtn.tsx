@@ -1,3 +1,5 @@
+"use client";
+
 import { ShoppingCart } from "@/actions/actions";
 import Link from "next/link";
 import { HiOutlineShoppingCart } from "react-icons/hi";
@@ -6,7 +8,14 @@ interface ShoppingCartButtonProps {
   cart: ShoppingCart | null;
 }
 
-const ShoppingCartBtn = async ({ cart }: ShoppingCartButtonProps) => {
+const ShoppingCartBtn = ({ cart }: ShoppingCartButtonProps) => {
+  const closeDropdown = () => {
+    const elem = document.activeElement as HTMLElement;
+    if (elem) {
+      elem.blur();
+    }
+  };
+
   return (
     <div className='dropdown dropdown-end'>
       <label tabIndex={0} className='btn btn-ghost btn-circle'>
@@ -27,7 +36,11 @@ const ShoppingCartBtn = async ({ cart }: ShoppingCartButtonProps) => {
           </span>
           <span className=''>Total summa: {cart?.totalPrice || 0} kr</span>
           <div className='cart-actions'>
-            <Link href={"/cart"} className='btn btn-primary btn-block'>
+            <Link
+              href={"/cart"}
+              className='btn btn-primary btn-block'
+              onClick={closeDropdown}
+            >
               Gå till varukorg
             </Link>
           </div>
