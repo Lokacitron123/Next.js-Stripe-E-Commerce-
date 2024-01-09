@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header/Header";
+import SessionProvider from "./SessionProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Gladiators Apparel",
+  title: "Johans sports apparel",
   description: "Are you not entertained?",
 };
 
@@ -18,8 +19,10 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={inter.className}>
-        <Header />
-        <main className='p-4 w-full m-auto min-w-[300px]'>{children}</main>
+        <SessionProvider>
+          <Header />
+          <main className='p-4 w-full m-auto min-w-[300px]'>{children}</main>
+        </SessionProvider>
       </body>
     </html>
   );
