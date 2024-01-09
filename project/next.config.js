@@ -4,6 +4,7 @@ const nextConfig = {
     remotePatterns: [
       { hostname: "images.unsplash.com" },
       { hostname: "cdn.intersport.se" },
+      { hostname: "lh3.googleusercontent.com" },
     ],
   },
 };

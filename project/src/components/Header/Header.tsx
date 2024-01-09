@@ -2,6 +2,9 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import ShoppingCartBtn from "./ShoppingCartBtn";
 import { getCart } from "@/actions/actions";
+import UserBtn from "./UserBtn";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 const searchProducts = async (formData: FormData) => {
   "use server";
@@ -14,6 +17,7 @@ const searchProducts = async (formData: FormData) => {
 };
 
 const Header = async () => {
+  const session = await getServerSession(authOptions);
   const cart = await getCart();
 
   return (
@@ -40,6 +44,7 @@ const Header = async () => {
         </form>
 
         <ShoppingCartBtn cart={cart} />
+        <UserBtn session={session} />
       </nav>
     </header>
   );

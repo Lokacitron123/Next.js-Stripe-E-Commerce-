@@ -1,4 +1,4 @@
-// This file is used for making the prima client globally available throughout the project
+// This file is used for making the prisma client globally available throughout the project
 // See documentation for further explanation: https://www.prisma.io/docs/orm/more/help-and-troubleshooting/help-articles/nextjs-prisma-client-dev-practices
 
 import { PrismaClient } from "@prisma/client";
