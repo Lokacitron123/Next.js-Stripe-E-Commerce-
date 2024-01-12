@@ -3,10 +3,6 @@
 import { useRef, useState, FormEvent } from "react";
 import { registerUser } from "@/actions/userAuthActions";
 
-// interface RegisterUserProps {
-//   registerUser: (formData: FormData) => Promise<void>;
-// }
-
 const RegisterUser = () => {
   const formRef = useRef<HTMLFormElement>(null);
   const [username, setUsername] = useState<string>("");

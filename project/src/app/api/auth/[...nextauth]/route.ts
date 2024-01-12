@@ -9,6 +9,9 @@ import { env } from "@/utils/env";
 import bcrypt from "bcrypt";
 
 export const authOptions: NextAuthOptions = {
+  session: {
+    strategy: "jwt",
+  },
   adapter: PrismaAdapter(prisma) as Adapter,
   providers: [
     GoogleProvider({
@@ -27,40 +30,44 @@ export const authOptions: NextAuthOptions = {
           label: "Password",
           type: "password",
         },
+        email: { label: "Email", type: "email" },
       },
       async authorize(credentials) {
-        if (!credentials) {
-          throw new Error("Please provide valid credentials");
+        //  validation of email and password
+        if (!credentials?.email || !credentials?.password) {
+          return null;
         }
 
+        // check for user
         const user = await prisma.user.findUnique({
           where: {
-            username: credentials?.username,
+            email: credentials?.email,
           },
         });
 
         if (!user) {
-          throw new Error("Username or password is incorrect");
+          return null;
         }
 
-        if (!credentials?.password == null) {
-          throw new Error("Please provide a password");
-        }
-
+        // Check password for match
         const checkPassword = await bcrypt.compare(
           credentials.password,
           user.password || ""
         );
 
         if (!checkPassword) {
-          throw new Error("Password or username is not correct");
+          return null;
         }
 
+        // If valid, return user without password
+        console.log("trying to log in");
         const { password, ...userWithoutPassword } = user;
         return userWithoutPassword;
       },
     }),
   ],
+  secret: env.NEXTAUTH_SECRET,
+  debug: process.env.NODE_ENV === "development",
 };
 
 const handler = NextAuth(authOptions);
