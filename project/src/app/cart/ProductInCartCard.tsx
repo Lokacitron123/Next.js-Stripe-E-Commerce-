@@ -13,7 +13,12 @@ const ProductInCartCard = ({
   return (
     <div>
       <div className='flex flex-wrap items-center gap-3'>
-        <Image src={product.defaultImg} alt={"Product image"} />
+        <Image
+          src={product.defaultImg}
+          alt={"Product image"}
+          width={500}
+          height={500}
+        />
       </div>
       <div className='divider' />
     </div>
