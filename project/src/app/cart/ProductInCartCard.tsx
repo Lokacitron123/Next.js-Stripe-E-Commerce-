@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { CartItemWithProduct } from "@/actions/actions";
+import { CartItemWithProduct } from "@/actions/cartActions";
 
 interface CartEntryProps {
   cartItem: CartItemWithProduct;

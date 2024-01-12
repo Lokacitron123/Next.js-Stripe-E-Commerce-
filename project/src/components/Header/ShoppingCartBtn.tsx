@@ -1,6 +1,6 @@
 "use client";
 
-import { ShoppingCart } from "@/actions/actions";
+import { ShoppingCart } from "@/actions/cartActions";
 import Link from "next/link";
 import { HiOutlineShoppingCart } from "react-icons/hi";
 
