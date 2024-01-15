@@ -1,10 +1,11 @@
 import prisma from "@/utils/db/prisma";
 import { Metadata } from "next";
-import Image from "next/image";
+
 import { notFound } from "next/navigation";
-import { cache } from "react";
+import { cache, useState } from "react";
 import AddToCartBtn from "@/components/AddToCartBtn/AddToCartBtn";
 import incrementProductQuantityInCart from "./actions";
+import VariantSelectorCard from "@/components/VariantSelector/VariantSelectorCard";
 
 // Get id out of the URL with params
 interface SingleProductProps {
@@ -47,28 +48,8 @@ const SingleProductPage = async ({ params: { id } }: SingleProductProps) => {
   const product = await getProduct(id);
 
   return (
-    <div className='flex flex-col lg:flex-row'>
-      <Image
-        src={product.defaultImg}
-        alt={product.name}
-        width={500}
-        height={500}
-        className='rounded-lg'
-      />
-      <div>
-        <h1 className='text-5xl font-bold'>{product.name}</h1>
-        <p>{product.price}</p>
-        <p>{product.description}</p>
-        {product.variant.map((variant, index) => (
-          <div key={index}>
-            <p>Color: {variant.color}</p>
-          </div>
-        ))}
-        <AddToCartBtn
-          productId={product.id}
-          incrementProductQuantityInCart={incrementProductQuantityInCart}
-        />
-      </div>
+    <div className='flex flex-col'>
+      <VariantSelectorCard product={product} />
     </div>
   );
 };

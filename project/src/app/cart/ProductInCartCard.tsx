@@ -19,6 +19,7 @@ const ProductInCartCard = ({
           width={500}
           height={500}
         />
+        <p></p>
       </div>
       <div className='divider' />
     </div>

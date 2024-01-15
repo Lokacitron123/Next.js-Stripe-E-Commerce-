@@ -17,7 +17,13 @@ export type CartWithProducts = Prisma.CartGetPayload<{
 }>;
 
 export type CartItemWithProduct = Prisma.CartItemGetPayload<{
-  include: { product: true };
+  include: {
+    product: {
+      include: {
+        variant: true;
+      };
+    };
+  };
 }>;
 
 export type ShoppingCart = CartWithProducts & {
