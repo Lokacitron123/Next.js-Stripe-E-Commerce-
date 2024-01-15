@@ -5,8 +5,11 @@ import { useState, useTransition } from "react";
 
 interface AddToCartButtonProps {
   productId: string;
-  selectedVariant: Variant | null;
-  incrementProductQuantityInCart: (productId: string) => Promise<void>;
+  selectedVariant: Variant;
+  incrementProductQuantityInCart: (
+    productId: string,
+    selectedVariant: Variant
+  ) => Promise<void>;
   disabled: boolean;
 }
 
@@ -29,7 +32,7 @@ const AddToCartBtn = ({
           if (!disabled) {
             setSuccesful(false);
             startTransition(async () => {
-              await incrementProductQuantityInCart(productId);
+              await incrementProductQuantityInCart(productId, selectedVariant);
               setSuccesful(true);
             });
           }

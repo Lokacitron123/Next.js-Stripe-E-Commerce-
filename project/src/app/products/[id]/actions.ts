@@ -2,10 +2,14 @@
 
 import { createCart, getCart } from "@/actions/cartActions";
 import prisma from "@/utils/db/prisma";
+import { Variant } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 // This file contains functions associated with the cart component
-const incrementProductQuantityInCart = async (productId: string) => {
+const incrementProductQuantityInCart = async (
+  productId: string,
+  selectedVariant: Variant
+) => {
   const cart = (await getCart()) ?? (await createCart());
 
   const productInCart = cart.items.find((item) => item.productId === productId);
@@ -19,8 +23,9 @@ const incrementProductQuantityInCart = async (productId: string) => {
     await prisma.cartItem.create({
       data: {
         cartId: cart.id,
-        productId,
+        productId: productId,
         quantity: 1,
+        selectedVariantId: selectedVariant.id,
       },
     });
   }
