@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import ShoppingCartBtn from "./ShoppingCartBtn";
-import { getCart } from "@/actions/actions";
+import { getCart } from "@/actions/cartActions";
 import UserBtn from "./UserBtn";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";

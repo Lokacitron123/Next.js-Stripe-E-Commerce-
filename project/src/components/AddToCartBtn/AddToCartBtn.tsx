@@ -1,17 +1,25 @@
 "use client";
 
+import { Variant } from "@prisma/client";
 import { useState, useTransition } from "react";
 
 interface AddToCartButtonProps {
   productId: string;
-  incrementProductQuantityInCart: (productId: string) => Promise<void>;
+  selectedVariant: Variant;
+  incrementProductQuantityInCart: (
+    productId: string,
+    selectedVariant: Variant
+  ) => Promise<void>;
+  disabled: boolean;
 }
 
 // Docs for useTransition and server actions: https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations
 
 const AddToCartBtn = ({
   productId,
+  selectedVariant,
   incrementProductQuantityInCart,
+  disabled,
 }: AddToCartButtonProps) => {
   let [isPending, startTransition] = useTransition();
   const [succesful, setSuccesful] = useState(false);
@@ -21,12 +29,15 @@ const AddToCartBtn = ({
       <button
         className='btn btn-primary'
         onClick={() => {
-          setSuccesful(false);
-          startTransition(async () => {
-            await incrementProductQuantityInCart(productId);
-            setSuccesful(true);
-          });
+          if (!disabled) {
+            setSuccesful(false);
+            startTransition(async () => {
+              await incrementProductQuantityInCart(productId, selectedVariant);
+              setSuccesful(true);
+            });
+          }
         }}
+        disabled={disabled}
       >
         Lägg till produkt
       </button>

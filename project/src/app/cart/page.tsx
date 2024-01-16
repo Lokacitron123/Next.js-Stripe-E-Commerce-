@@ -1,4 +1,4 @@
-import { getCart } from "@/actions/actions";
+import { getCart } from "@/actions/cartActions";
 import ProductInCartCard from "./ProductInCartCard";
 
 const CartPage = async () => {
