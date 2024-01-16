@@ -1,6 +1,10 @@
 "use server";
 
-import { createCart, getCart } from "@/actions/cartActions";
+import {
+  createCart,
+  getCart,
+  reduceVariantQuantity,
+} from "@/actions/cartActions";
 import prisma from "@/utils/db/prisma";
 import { Variant } from "@prisma/client";
 import { revalidatePath } from "next/cache";
@@ -30,6 +34,7 @@ const incrementProductQuantityInCart = async (
     });
   }
 
+  await reduceVariantQuantity(selectedVariant.id);
   // updates the url from this path
   // we update in order to see the changes
   revalidatePath("/products/[id]", "page");
