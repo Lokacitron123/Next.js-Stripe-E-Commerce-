@@ -1,6 +1,6 @@
 // This file contains functions that make operations on our database
 // Reason for we are not creating API routes is that with prisma we get it fetch requests inbuilt
-// One can still argue that it would be better to create API routes for conventions sake, however.
+// One can still argue that it would be better to create API routes for conventions sake.
 
 import { Cart, Prisma, Variant } from "@prisma/client";
 import prisma from "@/utils/db/prisma";
