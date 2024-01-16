@@ -76,3 +76,21 @@ export const createCart = async (): Promise<ShoppingCart> => {
     totalPrice: 0,
   };
 };
+
+export const reduceVariantQuantity = async (selectedVariantId: string) => {
+  const selectedVariant = await prisma.variant.findUnique({
+    where: { id: selectedVariantId },
+  });
+
+  if (!selectedVariant) {
+    throw new Error("Variant not found");
+  }
+
+  // Decrement the quantity by 1 (make sure it never goes below 0)
+  const newQuantity = Math.max(0, selectedVariant.quantity - 1);
+
+  await prisma.variant.update({
+    where: { id: selectedVariantId },
+    data: { quantity: newQuantity },
+  });
+};
