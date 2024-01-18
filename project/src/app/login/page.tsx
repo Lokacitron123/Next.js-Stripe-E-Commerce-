@@ -1,23 +1,23 @@
 "use client";
-import Credentials from "next-auth/providers/credentials";
+
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState, FormEvent } from "react";
+import { useState } from "react";
 
 const LoginPage = () => {
   const router = useRouter();
   const [togglePassword, setTogglePassword] = useState<boolean>(false);
-  const [data, setData] = useState({
-    email: "",
-    password: "",
-  });
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
   const handleToggle = () => setTogglePassword((prev) => !prev);
-  const handleLogin = async (e: FormEvent) => {
-    e.preventDefault();
+
+  const handleLogin = async (event: React.FormEvent) => {
+    event.preventDefault();
 
     signIn("credentials", {
-      ...data,
+      email,
+      password,
       redirect: false,
     });
     router.push("/");
@@ -34,9 +34,9 @@ const LoginPage = () => {
           name='email'
           placeholder='Din epost'
           className='mb-3 input input-bordered w-full max-w-xs'
-          value={data.email}
+          value={email}
           onChange={(e) => {
-            setData({ ...data, email: e.target.value });
+            setEmail(e.target.value);
           }}
           required
         />
@@ -51,7 +51,7 @@ const LoginPage = () => {
             placeholder='Lösenord...'
             className='input input-bordered w-full max-w-xs '
             onChange={(e) => {
-              setData({ ...data, password: e.target.value });
+              setPassword(e.target.value);
             }}
             required
           />

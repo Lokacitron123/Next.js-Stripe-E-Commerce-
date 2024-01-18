@@ -68,6 +68,35 @@ model CartItem {
   @@map("cartitems")
 }
 
+// Order related schemas
+
+model Order {
+  id             String           @id @default(auto()) @map("_id") @db.ObjectId
+  totalAmount    Int
+  status         String
+  createdAt      DateTime         @updatedAt
+  updatedAt      DateTime         @updatedAt
+  userId         String           @db.ObjectId
+  user           User             @relation(fields: [userId], references: [id])
+  orderedProduct OrderedProduct[]
+
+  @@map("orders")
+}
+
+model OrderedProduct {
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  price           Int
+  quantity        Int
+  genderCategory  String
+  productCategory String
+  defaultImg      String
+  Order           Order?  @relation(fields: [orderId], references: [id])
+  orderId         String? @db.ObjectId
+
+  @@map("orderedproducts")
+}
+
 // User related schemas
 
 model Review {
@@ -94,6 +123,7 @@ model User {
   sessions      Session[]
   Cart          Cart[]
   Review        Review[]
+  Order         Order[]
 
   @@map("users")
 }

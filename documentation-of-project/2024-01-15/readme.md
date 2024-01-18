@@ -2,7 +2,7 @@
 
 ### Date
 
-YYYY-MM-DD
+2024-01-15
 
 ## What I've done
 
