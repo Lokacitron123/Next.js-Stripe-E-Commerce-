@@ -9,9 +9,6 @@ import { env } from "@/utils/env";
 import bcrypt from "bcrypt";
 
 export const authOptions: NextAuthOptions = {
-  session: {
-    strategy: "jwt",
-  },
   adapter: PrismaAdapter(prisma) as Adapter,
   providers: [
     GoogleProvider({
@@ -19,18 +16,10 @@ export const authOptions: NextAuthOptions = {
       clientSecret: env.GOOGLE_CLIENT_SECRET,
     }),
     CredentialsProvider({
-      name: "Credentials",
+      name: "credentials",
       credentials: {
-        username: {
-          label: "Username",
-          type: "text",
-          place: "Your username",
-        },
-        password: {
-          label: "Password",
-          type: "password",
-        },
         email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         //  validation of email and password
@@ -41,7 +30,7 @@ export const authOptions: NextAuthOptions = {
         // check for user
         const user = await prisma.user.findUnique({
           where: {
-            email: credentials?.email,
+            email: credentials.email,
           },
         });
 
@@ -60,12 +49,14 @@ export const authOptions: NextAuthOptions = {
         }
 
         // If valid, return user without password
-        console.log("trying to log in");
         const { password, ...userWithoutPassword } = user;
         return userWithoutPassword;
       },
     }),
   ],
+  session: {
+    strategy: "jwt",
+  },
   secret: env.NEXTAUTH_SECRET,
   debug: process.env.NODE_ENV === "development",
 };
