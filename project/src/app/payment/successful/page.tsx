@@ -57,7 +57,7 @@ const SuccessfulpaymentPage = () => {
           <h2>Order Details</h2>
           <p>Order ID: {order.orderId}</p>
           <p>Total Amount: {order.totalAmount}</p>
-          {/* Add more details as needed */}
+          <p>{}</p>
         </div>
       ) : (
         <div>No order details available.</div>

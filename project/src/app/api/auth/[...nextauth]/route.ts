@@ -50,10 +50,20 @@ export const authOptions: NextAuthOptions = {
 
         // If valid, return user without password
         const { password, ...userWithoutPassword } = user;
-        return userWithoutPassword;
+        return { userWithoutPassword, id: user.id };
       },
     }),
   ],
+  callbacks: {
+    session({ session, user }) {
+      // Check if user and user.id are defined before setting session.user.id
+      if (user && user.id) {
+        session.user.id = user.id;
+      }
+
+      return session;
+    },
+  },
   session: {
     strategy: "jwt",
   },
