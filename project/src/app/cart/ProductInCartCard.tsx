@@ -18,8 +18,9 @@ const ProductInCartCard = ({
           alt={"Product image"}
           width={500}
           height={500}
+          priority={true}
         />
-        <p></p>
+        <p>Antal: {quantity}</p>
       </div>
       <div className='divider' />
     </div>

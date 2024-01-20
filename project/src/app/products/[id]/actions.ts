@@ -16,11 +16,15 @@ const incrementProductQuantityInCart = async (
 ) => {
   const cart = (await getCart()) ?? (await createCart());
 
-  const productInCart = cart.items.find((item) => item.productId === productId);
+  const existingCartItem = cart.items.find(
+    (item) =>
+      item.productId === productId &&
+      item.selectedVariantId === selectedVariant.id
+  );
 
-  if (productInCart) {
+  if (existingCartItem) {
     await prisma.cartItem.update({
-      where: { id: productInCart.id },
+      where: { id: existingCartItem.id },
       data: { quantity: { increment: 1 } },
     });
   } else {

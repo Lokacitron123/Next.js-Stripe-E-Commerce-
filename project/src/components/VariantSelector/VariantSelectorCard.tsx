@@ -64,6 +64,7 @@ const VariantSelectorCard = ({ product }: ProductProps) => {
               </option>
             ))}
           </select>
+          <div>{selectedVariant?.quantity}</div>
         </div>
       </div>
       <AddToCartBtn
