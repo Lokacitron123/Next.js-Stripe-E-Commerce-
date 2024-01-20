@@ -17,7 +17,6 @@ const UserBtn = () => {
   const [slideInForm, setSlideInForm] = useState(false);
 
   const user = useSession();
-  console.log("logging session", user);
 
   const handleSlideIn = () => {
     setSlideInForm(true);
