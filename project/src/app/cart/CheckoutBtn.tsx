@@ -14,11 +14,12 @@ type CheckoutBtnProps = {
 
 const CheckoutBtn = ({ cart }: CheckoutBtnProps) => {
   const { data: session, status } = useSession();
+  const userEmail = session?.user?.email ?? "";
 
   const handleCheckout = async () => {
     try {
       if (status === "authenticated") {
-        const session = await CreateCheckoutSession(cart);
+        const session = await CreateCheckoutSession(cart, userEmail);
 
         const stripe = await stripePromise;
         const { error }: any = await stripe?.redirectToCheckout({

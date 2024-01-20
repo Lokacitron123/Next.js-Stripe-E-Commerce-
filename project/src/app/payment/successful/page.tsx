@@ -1,48 +1,69 @@
 "use client";
-import { useSession } from "next-auth/react";
+
 import { verifyPayment } from "@/actions/stripeActions";
 import { useSearchParams } from "next/navigation";
-import VerifyPayment from "./verifyPayment";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+
+interface Order {
+  id: string;
+  orderId: string;
+  totalAmount: number;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+  userId: string;
+}
 
 const SuccessfulpaymentPage = () => {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("session_id") || ""; // sets a default value to make sure sessionId is not of type string | null when passed to verifyPayment
   const [isLoading, setIsLoading] = useState(true);
-  const session = useSession();
-
-  // console.log("Found session", session);
-
-  const userEmail = session.data?.user?.email ?? "";
+  const hinderDoubleRend = useRef(false);
+  const [order, setOrder] = useState<Order | null>(null);
 
   useEffect(() => {
-    const performVerification = async () => {
-      try {
-        await verifyPayment(sessionId, userEmail);
-        console.log("Payment verification successful");
-      } catch (error) {
-        console.error("Error in payment verification:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    if (hinderDoubleRend.current === false) {
+      const performVerification = async () => {
+        try {
+          const result = await verifyPayment(sessionId);
+          console.log("Payment verification successful");
 
-    if (sessionId && userEmail && isLoading) {
+          setOrder(result);
+
+          console.log("Order details:", result);
+        } catch (error) {
+          console.error("Error in payment verification:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
       performVerification();
+
+      return () => {
+        hinderDoubleRend.current = true;
+      };
     }
-  }, [sessionId, userEmail, isLoading]);
+  }, [sessionId]);
 
   return isLoading ? (
     <div>Loading...</div>
   ) : (
-    <VerifyPayment sessionId={sessionId} userEmail={userEmail} />
+    <div>
+      {order ? (
+        <div>
+          <h1>Payment succesful</h1>
+          <p>Here are your product details</p>
+          <h2>Order Details</h2>
+          <p>Order ID: {order.orderId}</p>
+          <p>Total Amount: {order.totalAmount}</p>
+          {/* Add more details as needed */}
+        </div>
+      ) : (
+        <div>No order details available.</div>
+      )}
+    </div>
   );
 };
-// console.log("log userEmail", userEmail);
-
-// verifyPayment(sessionId, userEmail);
-
-// return <div>Payment successful</div>;
-// return <VerifyPayment sessionId={sessionId} userEmail={userEmail} />;
 
 export default SuccessfulpaymentPage;

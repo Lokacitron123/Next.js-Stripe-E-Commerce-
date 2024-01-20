@@ -72,6 +72,7 @@ model CartItem {
 
 model Order {
   id             String           @id @default(auto()) @map("_id") @db.ObjectId
+  orderId        String           @unique
   totalAmount    Int
   status         String
   createdAt      DateTime         @updatedAt
