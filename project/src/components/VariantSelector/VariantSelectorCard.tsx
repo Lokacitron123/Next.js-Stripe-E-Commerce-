@@ -55,7 +55,7 @@ const VariantSelectorCard = ({ product }: ProductProps) => {
               handleSelectVariant(color, size);
             }}
           >
-            <option value='' disabled selected>
+            <option value='' disabled>
               Select a variant
             </option>
             {product.variant.map((variant, index) => (
@@ -69,7 +69,7 @@ const VariantSelectorCard = ({ product }: ProductProps) => {
       </div>
       <AddToCartBtn
         productId={product.id}
-        selectedVariant={selectedVariant}
+        selectedVariant={selectedVariant!}
         incrementProductQuantityInCart={incrementProductQuantityInCart}
         disabled={!variantSelected}
       />

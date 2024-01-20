@@ -76,7 +76,7 @@ export const getCart = async (): Promise<ShoppingCart | null> => {
 
 export const createCart = async (): Promise<ShoppingCart> => {
   const session = await getServerSession(authOptions);
-
+  console.log("logging session from cartActions", session);
   let newCart: Cart;
 
   if (session) {
