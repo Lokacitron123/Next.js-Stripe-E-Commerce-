@@ -1,11 +1,20 @@
-import { PrismaAdapter } from "@auth/prisma-adapter";
 import { NextAuthOptions } from "next-auth";
-import prisma from "@/utils/db/prisma";
+
+// For providing db connection and mutations with prisma
+import { PrismaAdapter } from "@auth/prisma-adapter";
 import { Adapter } from "next-auth/adapters";
-import GoogleProvider from "next-auth/providers/google";
+import prisma from "@/utils/db/prisma";
+
+// provider related imports
 import NextAuth from "next-auth/next";
+import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
+import EmailProvider from "next-auth/providers/email";
+
+// env with zod for type safety
 import { env } from "@/utils/env";
+
+// for hashing password
 import bcrypt from "bcrypt";
 
 export const authOptions: NextAuthOptions = {
@@ -15,6 +24,19 @@ export const authOptions: NextAuthOptions = {
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
     }),
+    EmailProvider({
+      server: {
+        host: process.env.EMAIL_SERVER_HOST,
+        port: process.env.EMAIL_SERVER_PORT,
+        auth: {
+          user: process.env.EMAIL_SERVER_USER,
+          pass: process.env.EMAIL_SERVER_PASSWORD,
+        },
+      },
+      from: env.EMAIL_FROM,
+    }),
+    // CredentialsProvider is not recommended by next-ath but added for learning purpose
+    // Can't be used with getServerSession without difficult configurations which Im not able to do
     CredentialsProvider({
       name: "credentials",
       credentials: {
@@ -49,21 +71,12 @@ export const authOptions: NextAuthOptions = {
         }
 
         // If valid, return user without password
+
         const { password, ...userWithoutPassword } = user;
-        return { userWithoutPassword, id: user.id };
+        return userWithoutPassword;
       },
     }),
   ],
-  callbacks: {
-    session({ session, user }) {
-      // Check if user and user.id are defined before setting session.user.id
-      if (user && user.id) {
-        session.user.id = user.id;
-      }
-
-      return session;
-    },
-  },
   session: {
     strategy: "jwt",
   },

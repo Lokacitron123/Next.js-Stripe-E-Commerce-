@@ -29,9 +29,9 @@ export type ShoppingCart = CartWithProducts & {
 export const getCart = async (): Promise<ShoppingCart | null> => {
   const session = await getServerSession(authOptions);
 
-  let cart: CartWithProducts | null;
+  let cart: CartWithProducts | null = null;
 
-  if (session) {
+  if (session?.user.email) {
     cart = await prisma.cart.findFirst({
       where: { userId: session.user.id },
       include: {
@@ -76,7 +76,7 @@ export const getCart = async (): Promise<ShoppingCart | null> => {
 
 export const createCart = async (): Promise<ShoppingCart> => {
   const session = await getServerSession(authOptions);
-  console.log("logging session from cartActions", session);
+  console.log("logging session from cartActions", session?.user.email);
   let newCart: Cart;
 
   if (session) {

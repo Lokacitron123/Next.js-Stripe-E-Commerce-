@@ -9,10 +9,6 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 
-interface UserBtnProps {
-  session: Session | null;
-}
-
 const UserBtn = () => {
   const [slideInForm, setSlideInForm] = useState(false);
 
@@ -57,7 +53,7 @@ const UserBtn = () => {
         <label tabIndex={0} className='btn btn-ghost btn-circle'>
           {user.status === "authenticated" ? (
             <Image
-              src={user.data?.user?.image || placeholderProfile}
+              src={user.data.user.image || placeholderProfile}
               alt='User profile image'
               width={40}
               height={40}
@@ -89,6 +85,7 @@ const UserBtn = () => {
             )}
           </li>
         </ul>
+        <p>{user.data?.user.email}</p>
       </div>
 
       {slideInForm && (

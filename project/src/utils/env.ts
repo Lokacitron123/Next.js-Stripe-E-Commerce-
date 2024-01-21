@@ -14,6 +14,12 @@ const envSchema = z.object({
   STRIPE_SECRET_KEY: z.string().min(1),
   NEXT_PUBLIC_STRIPE_SUCCESS_URL: z.string().min(1),
   NEXT_PUBLIC_STRIPE_CANCEL_URL: z.string().min(1),
+
+  EMAIL_SERVER_USER: z.string().min(1),
+  EMAIL_SERVER_PASSWORD: z.string().min(1),
+  EMAIL_SERVER_HOST: z.string().min(1),
+  EMAIL_SERVER_PORT: z.string().min(1),
+  EMAIL_FROM: z.string().min(1),
 });
 
 export const env = envSchema.parse(process.env);

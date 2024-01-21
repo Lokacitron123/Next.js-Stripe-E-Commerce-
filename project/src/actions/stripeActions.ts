@@ -4,10 +4,9 @@ import { CartWithProducts } from "@/actions/cartActions";
 import { Cart, CartItem, Order, Prisma, User } from "@prisma/client";
 import Stripe from "stripe";
 import prisma from "@/utils/db/prisma";
+import { env } from "@/utils/env";
 
-const stripe = new Stripe(
-  "sk_test_51OZDqDAx1nxWOiL6ZOACQUcRAEQ7dZPWl4WXQ1fer4wGg3MmZYmORmLcwufJ0iVp13rZJGhoLmxgiJvQINxRzu8w00MVGQ5YMJ"
-);
+const stripe = new Stripe(env.STRIPE_SECRET_KEY);
 
 interface OrderInterface {
   id: string;
@@ -143,7 +142,6 @@ export const createOrder = async (
       if (payingUserCartWithItems) {
         const userCart: Cart = payingUserCartWithItems;
 
-        console.log("User:", payingUser);
         console.log("User Cart:", userCart);
       } else {
         console.log("User has no cart.");
