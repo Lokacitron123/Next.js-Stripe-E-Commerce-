@@ -49,11 +49,14 @@ const VariantForm = ({ product, updateVariantFunction }: VariantFormProps) => {
 
   const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
+    const parsedValue = parseInt(value, 10);
 
-    setNewVariant((prevVariant) => ({
-      ...prevVariant,
-      [name]: parseInt(value, 10),
-    }));
+    if (!isNaN(parsedValue)) {
+      setNewVariant((prevVariant) => ({
+        ...prevVariant,
+        [name]: parsedValue,
+      }));
+    }
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

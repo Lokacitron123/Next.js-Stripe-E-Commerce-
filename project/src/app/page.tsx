@@ -1,5 +1,14 @@
+import { getServerSession } from "next-auth";
 import Image from "next/image";
+import { authOptions } from "./api/auth/[...nextauth]/route";
 
-export default function HomePage() {
-  return <main>Home</main>;
+export default async function HomePage() {
+  const data = await getServerSession(authOptions);
+
+  return (
+    <main>
+      <h1>Homepage</h1>
+      <p>{data?.expires}</p>
+    </main>
+  );
 }

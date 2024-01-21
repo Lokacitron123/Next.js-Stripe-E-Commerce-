@@ -5,25 +5,19 @@
 import { Cart, Prisma, Variant } from "@prisma/client";
 import prisma from "@/utils/db/prisma";
 import { cookies } from "next/dist/client/components/headers";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export type CartWithProducts = Prisma.CartGetPayload<{
   include: {
     items: {
-      include: {
-        product: { include: { variant: true } };
-      };
+      include: { product: true; selectedVariant: true };
     };
   };
 }>;
 
 export type CartItemWithProduct = Prisma.CartItemGetPayload<{
-  include: {
-    product: {
-      include: {
-        variant: true;
-      };
-    };
-  };
+  include: { product: true; selectedVariant: true };
 }>;
 
 export type ShoppingCart = CartWithProducts & {
@@ -33,20 +27,38 @@ export type ShoppingCart = CartWithProducts & {
 
 // Retrieves a cart from database with product and correct variant
 export const getCart = async (): Promise<ShoppingCart | null> => {
-  const cartInLocalStorageId = cookies().get("cartInLocalStorageId")?.value;
+  const session = await getServerSession(authOptions);
 
-  const cart = cartInLocalStorageId
-    ? await prisma.cart.findUnique({
-        where: { id: cartInLocalStorageId },
-        include: {
-          items: {
-            include: {
-              product: { include: { variant: true } },
-            },
+  let cart: CartWithProducts | null = null;
+
+  if (session?.user.email) {
+    cart = await prisma.cart.findFirst({
+      where: { userId: session.user.id },
+      include: {
+        items: {
+          include: {
+            product: true,
+            selectedVariant: true,
           },
         },
-      })
-    : null;
+      },
+    });
+  } else {
+    const cartInLocalStorageId = cookies().get("cartInLocalStorageId")?.value;
+    cart = cartInLocalStorageId
+      ? await prisma.cart.findUnique({
+          where: { id: cartInLocalStorageId },
+          include: {
+            items: {
+              include: {
+                product: true,
+                selectedVariant: true,
+              },
+            },
+          },
+        })
+      : null;
+  }
 
   if (!cart) {
     return null;
@@ -63,11 +75,21 @@ export const getCart = async (): Promise<ShoppingCart | null> => {
 };
 
 export const createCart = async (): Promise<ShoppingCart> => {
-  const newCart = await prisma.cart.create({
-    data: {},
-  });
+  const session = await getServerSession(authOptions);
+  console.log("logging session from cartActions", session?.user.email);
+  let newCart: Cart;
 
-  cookies().set("cartInLocalStorageId", newCart.id);
+  if (session) {
+    newCart = await prisma.cart.create({
+      data: { userId: session.user.id },
+    });
+  } else {
+    newCart = await prisma.cart.create({
+      data: {},
+    });
+
+    cookies().set("cartInLocalStorageId", newCart.id);
+  }
 
   return {
     ...newCart,

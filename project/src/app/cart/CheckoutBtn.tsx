@@ -14,6 +14,7 @@ type CheckoutBtnProps = {
 
 const CheckoutBtn = ({ cart }: CheckoutBtnProps) => {
   const { data: session, status } = useSession();
+
   const userEmail = session?.user?.email ?? "";
 
   const handleCheckout = async () => {
@@ -34,7 +35,6 @@ const CheckoutBtn = ({ cart }: CheckoutBtnProps) => {
       }
     } catch (error) {
       console.error("Error handling checkout:", error);
-      // Handle error, display a message to the user, etc.
     }
   };
 
