@@ -141,22 +141,6 @@ export const createOrder = async (
 
     console.log("Logging mapped orderedProductsData", orderedProductsData);
 
-    // const newOrder = await prisma.order.create({
-    //   data: {
-    //     orderId: sessionId,
-    //     totalAmount: session.amount_total || 0,
-    //     status: session.payment_status,
-    //     user: {
-    //       connect: { email: session.customer_email || "" },
-    //     },
-    //     orderedProduct: {
-    //       createMany: {
-    //         data: orderedProductsData || [],
-    //       },
-    //     },
-    //   },
-    // });
-
     const newOrder = await prisma.order.create({
       data: {
         orderId: sessionId,
