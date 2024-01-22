@@ -5,6 +5,8 @@ import { Cart, CartItem, Order, Prisma, User } from "@prisma/client";
 import Stripe from "stripe";
 import prisma from "@/utils/db/prisma";
 import { env } from "@/utils/env";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 const stripe = new Stripe(env.STRIPE_SECRET_KEY);
 
@@ -85,6 +87,7 @@ export const createOrder = async (
   session: Stripe.Response<Stripe.Checkout.Session>
 ) => {
   try {
+    const user = await getServerSession(authOptions);
     // Check if an order with the same sessionId already exists
     // To prevent the order from being recreated
     const existingOrder = await prisma.order.findUnique({
@@ -104,74 +107,76 @@ export const createOrder = async (
       return existingOrder;
     }
 
-    // finding cart in database via the paying user's email
-    // A user has to be logged in and provide the email they signed the account with to pay
-    // Thus we can use it populate the order / orderedItems with the items found in cart / cartItems
-    const payingUserWithCartAndItems = await prisma.user.findUnique({
+    const userWithID = await prisma.user.findUnique({
       where: {
-        email: session?.customer_email || "",
+        email: user?.user?.email || "",
+      },
+    });
+
+    const userCart = await prisma.cart.findFirst({
+      where: {
+        userId: userWithID?.id,
       },
       include: {
-        Cart: {
+        items: {
           include: {
-            items: {
-              include: {
-                product: true,
-                selectedVariant: true,
-              },
-            },
+            product: true,
+            selectedVariant: true,
           },
         },
       },
     });
 
-    console.log("log paying user", payingUserWithCartAndItems);
+    console.log("logging usercart", userCart?.items);
 
-    if (payingUserWithCartAndItems) {
-      console.log("User ID:", payingUserWithCartAndItems.id);
-      const payingUserCartWithItems: Cart | null = await prisma.cart.findUnique(
-        {
-          where: {
-            id: payingUserWithCartAndItems.id,
-          },
-        }
-      );
+    const orderedProductsData = userCart?.items.map((cartItem: any) => ({
+      name: cartItem.product.name,
+      price: cartItem.product.price,
+      quantity: cartItem.quantity,
+      genderCategory: cartItem.product.genderCategory,
+      productCategory: cartItem.product.productCategory,
+      defaultImg: cartItem.selectedVariant.image,
+      orderId: sessionId,
+    }));
 
-      console.log("logging payingusercart", payingUserCartWithItems);
+    console.log("Logging mapped orderedProductsData", orderedProductsData);
 
-      if (payingUserCartWithItems) {
-        const userCart: Cart = payingUserCartWithItems;
-
-        console.log("User Cart:", userCart);
-      } else {
-        console.log("User has no cart.");
-      }
-    } else {
-      console.log("User not found.");
-    }
+    // const newOrder = await prisma.order.create({
+    //   data: {
+    //     orderId: sessionId,
+    //     totalAmount: session.amount_total || 0,
+    //     status: session.payment_status,
+    //     user: {
+    //       connect: { email: session.customer_email || "" },
+    //     },
+    //     orderedProduct: {
+    //       createMany: {
+    //         data: orderedProductsData || [],
+    //       },
+    //     },
+    //   },
+    // });
 
     const newOrder = await prisma.order.create({
       data: {
         orderId: sessionId,
         totalAmount: session.amount_total || 0,
         status: session.payment_status,
-        user: {
-          connect: { email: session.customer_email || "" },
+        userId: userWithID?.id || "",
+        orderedProduct: {
+          create: orderedProductsData?.map((productData) => ({
+            name: productData.name,
+            price: productData.price,
+            quantity: productData.quantity,
+            genderCategory: productData.genderCategory,
+            productCategory: productData.productCategory,
+            defaultImg: productData.defaultImg,
+          })),
         },
-        // orderedProduct: {
-        //   create: userCart?.data.map((item) => ({
-        //     name: item. || "",
-        //     price: lineItem.amount_total || 0,
-        //     quantity: lineItem.quantity || 0,
-        //     genderCategory: "",
-        //     productCategory: "",
-        //     defaultImg: "",
-        //   })),
-        // },
       },
     });
 
-    console.log("New Order created:", newOrder); // Log the new order details
+    console.log("logging new order", newOrder);
 
     // Returning newOrder
     return newOrder;
