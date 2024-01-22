@@ -16,6 +16,7 @@ import { env } from "@/utils/env";
 
 // for hashing password
 import bcrypt from "bcrypt";
+import { mergeLocalCartWithUserCart } from "@/actions/cartActions";
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma) as Adapter,
@@ -77,6 +78,11 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
+  events: {
+    async signIn({ user }) {
+      await mergeLocalCartWithUserCart(user.email || "");
+    },
+  },
   session: {
     strategy: "jwt",
   },
