@@ -87,15 +87,15 @@ model Order {
 }
 
 model OrderedProduct {
-  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  id              String @id @default(auto()) @map("_id") @db.ObjectId
   name            String
   price           Int
   quantity        Int
   genderCategory  String
   productCategory String
   defaultImg      String
-  Order           Order?  @relation(fields: [orderId], references: [id])
-  orderId         String? @db.ObjectId
+  Order           Order  @relation(fields: [orderId], references: [id])
+  orderId         String @db.ObjectId
 
   @@map("orderedproducts")
 }

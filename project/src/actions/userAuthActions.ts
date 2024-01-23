@@ -11,7 +11,6 @@ type UserProps = {
 export const registerUser = async (user: UserProps) => {
   const existingUsernameAndOrEmail = await prisma.user.findFirst({
     where: {
-      username: user.username,
       email: user.email,
     },
   });
@@ -28,7 +27,6 @@ export const registerUser = async (user: UserProps) => {
 
   await prisma.user.create({
     data: {
-      username: user.username,
       email: user.email,
       password: hashedPassword,
     },
