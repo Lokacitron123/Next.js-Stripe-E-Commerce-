@@ -102,8 +102,6 @@ export const createOrder = async (
     // Sends the order if already existing back to the frontend
     // preventing a duplication of the same order
     if (existingOrder) {
-      console.log("Order already exists:", existingOrder);
-
       return existingOrder;
     }
 
@@ -127,8 +125,6 @@ export const createOrder = async (
       },
     });
 
-    console.log("logging usercart", userCart?.items);
-
     const orderedProductsData = userCart?.items.map((cartItem: any) => ({
       name: cartItem.product.name,
       price: cartItem.product.price,
@@ -138,8 +134,6 @@ export const createOrder = async (
       defaultImg: cartItem.selectedVariant.image,
       orderId: sessionId,
     }));
-
-    console.log("Logging mapped orderedProductsData", orderedProductsData);
 
     const newOrder = await prisma.order.create({
       data: {
@@ -160,7 +154,9 @@ export const createOrder = async (
       },
     });
 
-    console.log("logging new order", newOrder);
+    if (newOrder && userCart) {
+      await removeCartFromUserAfterPayment(userCart);
+    }
 
     // Returning newOrder
     return newOrder;
@@ -171,3 +167,16 @@ export const createOrder = async (
 };
 
 export const reduceQuantityInDB = () => {};
+
+export const removeCartFromUserAfterPayment = async (userCart: any) => {
+  try {
+    await prisma.cart.delete({
+      where: {
+        id: userCart.id,
+      },
+    });
+  } catch (error) {
+    console.error("Error deleting cart:", error);
+    return new Error("Could not delete cart");
+  }
+};
