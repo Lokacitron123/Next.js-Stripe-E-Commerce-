@@ -3,12 +3,9 @@ import Image from "next/image";
 import { authOptions } from "./api/auth/[...nextauth]/route";
 
 export default async function HomePage() {
-  const data = await getServerSession(authOptions);
-
   return (
-    <main>
+    <div className=''>
       <h1>Homepage</h1>
-      <p>{data?.expires}</p>
-    </main>
+    </div>
   );
 }
