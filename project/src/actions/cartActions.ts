@@ -31,30 +31,25 @@ export const getCart = async (): Promise<ShoppingCart | null> => {
 
   let cart: CartWithProducts | null = null;
 
-  if (session?.user) {
-    // find user with mail from session
-    // id is not returned by the session normally but we need it to identify the users cart
-    // Therefor we find it by finding the user first by email on the session
+  if (session) {
     const userId = await prisma.user.findUnique({
       where: {
-        email: session?.user.email || "",
+        email: session?.user?.email || "",
       },
     });
 
-    if (userId) {
-      // find the cart with userId from found user matching user in session and retrievies it
-      cart = await prisma.cart.findFirst({
-        where: { userId: userId?.id },
-        include: {
-          items: {
-            include: {
-              product: true,
-              selectedVariant: true,
-            },
+    // find the cart with userId from found user matching user in session and retrievies it
+    cart = await prisma.cart.findFirst({
+      where: { userId: userId?.id },
+      include: {
+        items: {
+          include: {
+            product: true,
+            selectedVariant: true,
           },
         },
-      });
-    }
+      },
+    });
   } else {
     // If user is not logged in, find a cart with the id from cookie
 
@@ -93,35 +88,21 @@ export const getCart = async (): Promise<ShoppingCart | null> => {
 export const createCart = async (): Promise<ShoppingCart> => {
   const session = await getServerSession(authOptions);
 
-  let userId: User | null = null;
-
-  if (session?.user) {
-    // find user with mail from session
-    // id is not returned by the session normally but we need it to identify the users cart
-    // Therefor we find it by finding the user first by email on the session
-    const userId = await prisma.user.findUnique({
-      where: {
-        email: session?.user.email || "",
-      },
-    });
-  }
-
   // Declare a cart
   // We declare it as empty
   let newCart: Cart;
 
-  // If logged in, creates an empty cart
-  if (userId) {
-    // find user with mail from session
-    // id is not returned by the session but we need it
-    const user = await prisma.user.findUnique({
+  //
+
+  if (session) {
+    const userId = await prisma.user.findUnique({
       where: {
-        id: userId || "",
+        email: session?.user?.email || "",
       },
     });
 
     newCart = await prisma.cart.create({
-      data: { userId: user?.id },
+      data: { userId: userId?.id },
     });
   } else {
     // if not logged in, creates cart and stores it in a cookie
