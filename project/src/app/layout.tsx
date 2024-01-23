@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header/Header";
 import Provider from "./SessionProvider";
+import Footer from "@/components/Footer/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -20,7 +21,10 @@ export default function RootLayout({
       <body className={inter.className}>
         <Provider>
           <Header />
-          <main className='p-4 w-full m-auto min-w-[300px]'>{children}</main>
+          <main className='p-4 w-full min-h-screen m-auto min-w-[300px]'>
+            {children}
+          </main>
+          <Footer />
         </Provider>
       </body>
     </html>

@@ -1,20 +1,15 @@
 "use client";
 
 import { verifyPayment } from "@/actions/stripeActions";
+import { getCart } from "@/actions/cartActions";
+
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
-
-interface Order {
-  id: string;
-  orderId: string;
-  totalAmount: number;
-  status: string;
-  createdAt: Date;
-  updatedAt: Date;
-  userId: string;
-}
+import { Order } from "@prisma/client";
+import { useRouter } from "next/navigation";
 
 const SuccessfulpaymentPage = () => {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("session_id") || ""; // sets a default value to make sure sessionId is not of type string | null when passed to verifyPayment
   const [isLoading, setIsLoading] = useState(true);
@@ -34,6 +29,7 @@ const SuccessfulpaymentPage = () => {
         } catch (error) {
           console.error("Error in payment verification:", error);
         } finally {
+          router.refresh(); // refresh page to show correct amount of items in cart
           setIsLoading(false);
         }
       };
@@ -44,7 +40,7 @@ const SuccessfulpaymentPage = () => {
         hinderDoubleRend.current = true;
       };
     }
-  }, [sessionId]);
+  }, [sessionId, router]);
 
   return isLoading ? (
     <div>Loading...</div>
