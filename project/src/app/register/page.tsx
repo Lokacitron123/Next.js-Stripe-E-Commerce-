@@ -1,13 +1,15 @@
 "use client";
 
+// failed implementing formData for registering a user
+// Therefor vent with a call to an api route
+// Due to being more used to this way of writing code
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 const RegisterPage = () => {
   const router = useRouter();
   const [data, setData] = useState({
-    name: "",
-    username: "",
     email: "",
     password: "",
   });
@@ -30,8 +32,6 @@ const RegisterPage = () => {
         setError(errorInfo.error);
 
         setData({
-          name: "",
-          username: "",
           email: "",
           password: "",
         });
@@ -48,8 +48,6 @@ const RegisterPage = () => {
       console.error("An error occurred:", error);
       setError("An unexpected error occurred. Please try again."); // Update the error state}
       setData({
-        name: "",
-        username: "",
         email: "",
         password: "",
       });
@@ -61,36 +59,6 @@ const RegisterPage = () => {
       <h1 className='text-lg mb-3 font-bold'>Registrera användare</h1>
       {error && <p className='text-red-500'>{error}</p>}
       <form onSubmit={registerUser}>
-        <label className='label' htmlFor='name'>
-          Namn
-        </label>
-        <input
-          className='input input-bordered w-full max-w-xs'
-          type='text'
-          name='name'
-          placeholder='Ditt namn...'
-          required
-          value={data.name}
-          onChange={(e) => {
-            setData({ ...data, name: e.target.value });
-          }}
-        />
-
-        <label className='label' htmlFor='username'>
-          Användarnamn
-        </label>
-        <input
-          className='input input-bordered w-full max-w-xs'
-          type='text'
-          name='username'
-          placeholder='Ditt användarnamn...'
-          required
-          value={data.username}
-          onChange={(e) => {
-            setData({ ...data, username: e.target.value });
-          }}
-        />
-
         <label className='label' htmlFor='email'>
           Epost
         </label>

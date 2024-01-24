@@ -41,8 +41,12 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "credentials",
       credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
+        email: { label: "Email", type: "email", placeholder: "Your email..." },
+        password: {
+          label: "Password",
+          type: "password",
+          placeholder: "Your password...",
+        },
       },
       async authorize(credentials) {
         //  validation of email and password
@@ -57,6 +61,7 @@ export const authOptions: NextAuthOptions = {
           },
         });
 
+        // return if no user with matching email
         if (!user) {
           return null;
         }

@@ -6,17 +6,16 @@ export async function POST(req: NextRequest, res: NextResponse) {
   try {
     // Destructure data from the request body
     const body = await req.json();
-    const { name, username, email, password } = body;
+    const { email, password } = body;
     console.log(body);
     // Check if any field is missing
-    if (!name || !username || !email || !password) {
+    if (!email || !password) {
       throw new Error("Please fill in all the credentials");
     }
 
     // Check if a user with the given email already exists
     const existOrNot = await prisma.user.findUnique({
       where: {
-        username: username,
         email: email,
       },
     });
@@ -29,10 +28,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create a new user
-    const newUser = await prisma.user.create({
+    await prisma.user.create({
       data: {
-        name: name,
-        username: username,
         email: email,
         password: hashedPassword,
       },

@@ -72,7 +72,7 @@ const UserBtn = () => {
         </label>
         <ul
           tabIndex={0}
-          className='dropdown-content menu rounded-box menu-sm z-30 mt-3 w-52 bg-blue-100 p-2 gap-5'
+          className='dropdown-content menu rounded-box menu-sm z-30 mt-3 w-52 bg-slate-400 p-2 gap-3'
         >
           {user.status === "authenticated" ? (
             <>
@@ -99,19 +99,26 @@ const UserBtn = () => {
                   className='btn btn-secondary btn-block'
                   onClick={() => signOut({ callbackUrl: "/" })}
                 >
-                  Logga ut
+                  Log out
                 </button>
               </li>
             </>
           ) : (
-            <li>
-              <button
-                className='btn btn-primary btn-block'
-                onClick={handleSlideIn}
-              >
-                Logga in
-              </button>
-            </li>
+            <>
+              <li>
+                <button
+                  className='btn btn-primary btn-block'
+                  onClick={handleSlideIn}
+                >
+                  Log in
+                </button>
+              </li>
+              <li>
+                <button className='btn btn-secondary'>
+                  <Link href={"/register"}>Register new user</Link>
+                </button>
+              </li>
+            </>
           )}
         </ul>
         <p>{user.data?.user?.email}</p>
@@ -119,10 +126,21 @@ const UserBtn = () => {
 
       {slideInForm && (
         <div className='fixed inset-0 z-50 bg-black bg-opacity-50'>
-          <div className='absolute top-0 right-0 h-full bg-white w-80'>
-            <button onClick={closeSlideInForm}>Close</button>
-            <button onClick={() => signIn()}>Logga in med Google</button>
-            <Link href='/login'>Logga in med credentials</Link>
+          <div className='absolute top-0 right-0 h-full bg-slate-500 w-80  '>
+            <div className='w-full p-4 flex justify-end'>
+              <button className='btn btn-circle' onClick={closeSlideInForm}>
+                Close
+              </button>
+            </div>
+            <ul className='menu bg-base-200 w-56 rounded-box m-auto'>
+              <li>
+                <button onClick={() => signIn()}>Logga in med Google</button>
+              </li>
+              <li>
+                <Link href='/login'>Logga in med credentials</Link>
+              </li>
+              <li></li>
+            </ul>
           </div>
         </div>
       )}
