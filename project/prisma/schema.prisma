@@ -121,6 +121,7 @@ model User {
   password      String?
   emailVerified DateTime?
   image         String?
+  role          Role      @default(user)
   accounts      Account[]
   sessions      Session[]
   Cart          Cart[]
@@ -128,6 +129,11 @@ model User {
   Order         Order[]
 
   @@map("users")
+}
+
+enum Role {
+  user
+  admin
 }
 
 model VerificationToken {

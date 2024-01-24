@@ -10,6 +10,7 @@ import NextAuth from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import EmailProvider from "next-auth/providers/email";
+import { GoogleProfile } from "next-auth/providers/google";
 
 // env with zod for type safety
 import { env } from "@/utils/env";
@@ -24,6 +25,15 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
+      profile(profile: GoogleProfile) {
+        return {
+          id: profile.sub || profile.email,
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture,
+          role: profile.role ?? "user",
+        };
+      },
     }),
     EmailProvider({
       server: {
@@ -86,6 +96,16 @@ export const authOptions: NextAuthOptions = {
   events: {
     async signIn({ user }) {
       await mergeLocalCartWithUserCart(user.email || "");
+    },
+  },
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) token.role = user.role;
+      return token;
+    },
+    async session({ session, token }) {
+      if (session?.user) session.user.role = token.role;
+      return session;
     },
   },
   session: {
