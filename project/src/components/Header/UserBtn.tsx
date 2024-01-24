@@ -47,13 +47,20 @@ const UserBtn = () => {
     };
   }, [slideInForm]);
 
+  const closeDropdown = () => {
+    const elem = document.activeElement as HTMLElement;
+    if (elem) {
+      elem.blur();
+    }
+  };
+
   return (
     <>
       <div className='dropdown dropdown-end'>
         <label tabIndex={0} className='btn btn-ghost btn-circle'>
           {user.status === "authenticated" ? (
             <Image
-              src={user.data.user.image || placeholderProfile}
+              src={user.data.user?.image || placeholderProfile}
               alt='User profile image'
               width={40}
               height={40}
@@ -65,27 +72,49 @@ const UserBtn = () => {
         </label>
         <ul
           tabIndex={0}
-          className='dropdown-content menu rounded-box menu-sm z-30 mt-3 w-52 bg-blue-100 p-2'
+          className='dropdown-content menu rounded-box menu-sm z-30 mt-3 w-52 bg-blue-100 p-2 gap-5'
         >
-          <li>
-            {user.status === "authenticated" ? (
-              <button
-                className='btn btn-secondary btn-block'
-                onClick={() => signOut({ callbackUrl: "/" })}
-              >
-                Logga ut
-              </button>
-            ) : (
+          {user.status === "authenticated" ? (
+            <>
+              <li>
+                <Link
+                  href={"/userdashboard"}
+                  onClick={closeDropdown}
+                  className='btn'
+                >
+                  User settings
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href={"/dashboard"}
+                  onClick={closeDropdown}
+                  className='btn'
+                >
+                  Admin dashboard
+                </Link>
+              </li>
+              <li>
+                <button
+                  className='btn btn-secondary btn-block'
+                  onClick={() => signOut({ callbackUrl: "/" })}
+                >
+                  Logga ut
+                </button>
+              </li>
+            </>
+          ) : (
+            <li>
               <button
                 className='btn btn-primary btn-block'
                 onClick={handleSlideIn}
               >
                 Logga in
               </button>
-            )}
-          </li>
+            </li>
+          )}
         </ul>
-        <p>{user.data?.user.email}</p>
+        <p>{user.data?.user?.email}</p>
       </div>
 
       {slideInForm && (
