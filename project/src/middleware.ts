@@ -3,8 +3,6 @@ import { NextResponse } from "next/server";
 
 export default withAuth(
   function middleware(request: NextRequestWithAuth) {
-    const userRole = request.nextauth.token?.role;
-
     if (
       request.nextUrl.pathname.startsWith("/dashboard") &&
       request.nextauth.token?.role !== "admin"

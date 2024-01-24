@@ -99,12 +99,21 @@ export const authOptions: NextAuthOptions = {
     },
   },
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) token.role = user.role;
+    async jwt({ token }) {
+      // fetch the user by the email on the token
+      const fetchedUser = await prisma.user.findFirst({
+        where: {
+          email: token.email || "",
+        },
+      });
+
+      // extend the token with fetchedUser.role
+      // Token can now be used in the middleware.ts to grand access or deny pages
+      token.role = fetchedUser?.role || "";
+
       return token;
     },
-    async session({ session, token }) {
-      if (session?.user) session.user.role = token.role;
+    async session({ session }) {
       return session;
     },
   },

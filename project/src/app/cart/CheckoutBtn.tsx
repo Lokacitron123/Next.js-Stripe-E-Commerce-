@@ -15,7 +15,8 @@ type CheckoutBtnProps = {
 const CheckoutBtn = ({ cart }: CheckoutBtnProps) => {
   const { data: session, status } = useSession();
 
-  const userEmail = session?.user?.email ?? "";
+  const userEmail = session?.user.email ?? "";
+  console.log("userEmail", userEmail);
 
   const handleCheckout = async () => {
     try {

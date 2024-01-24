@@ -8,12 +8,17 @@ declare module "next-auth" {
   interface Session {
     user: {
       id: string;
-      role: string;
+      name: string | null;
+      email: string | null;
+      password: string | null;
+      emailVerified: Date | null;
+      image: string | null;
+      role: $Enums.Role;
     } & DefaultSession;
   }
 
   interface User extends DefaultUser {
-    role: string;
+    role: string | "";
   }
 }
 
