@@ -1,7 +1,6 @@
 "use server";
 
 import { CartWithProducts } from "@/actions/cartActions";
-import { Cart, CartItem, Order, Prisma, User } from "@prisma/client";
 import Stripe from "stripe";
 import prisma from "@/utils/db/prisma";
 import { env } from "@/utils/env";
@@ -62,7 +61,6 @@ export const verifyPayment = async (
     const session = await stripe.checkout.sessions.retrieve(sessionId);
 
     if (session.payment_status === "paid") {
-      console.log("inside of payment paid check");
       // find the user who paid by checking the logged in user's session
       try {
         const orderDetails = await createOrder(sessionId, session);
@@ -88,6 +86,7 @@ export const createOrder = async (
 ) => {
   try {
     const user = await getServerSession(authOptions);
+
     // Check if an order with the same sessionId already exists
     // To prevent the order from being recreated
     const existingOrder = await prisma.order.findUnique({
@@ -107,7 +106,7 @@ export const createOrder = async (
 
     const userWithID = await prisma.user.findUnique({
       where: {
-        email: user?.user?.email || "",
+        email: user?.user.email || "",
       },
     });
 
@@ -165,8 +164,6 @@ export const createOrder = async (
     throw new Error("Error creating order");
   }
 };
-
-export const reduceQuantityInDB = () => {};
 
 export const removeCartFromUserAfterPayment = async (userCart: any) => {
   try {

@@ -10,6 +10,7 @@ import NextAuth from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import EmailProvider from "next-auth/providers/email";
+import { GoogleProfile } from "next-auth/providers/google";
 
 // env with zod for type safety
 import { env } from "@/utils/env";
@@ -24,6 +25,15 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
+      profile(profile: GoogleProfile) {
+        return {
+          id: profile.sub || profile.email,
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture,
+          role: profile.role ?? "user",
+        };
+      },
     }),
     EmailProvider({
       server: {
@@ -41,8 +51,12 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "credentials",
       credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
+        email: { label: "Email", type: "email", placeholder: "Your email..." },
+        password: {
+          label: "Password",
+          type: "password",
+          placeholder: "Your password...",
+        },
       },
       async authorize(credentials) {
         //  validation of email and password
@@ -57,6 +71,7 @@ export const authOptions: NextAuthOptions = {
           },
         });
 
+        // return if no user with matching email
         if (!user) {
           return null;
         }
@@ -81,6 +96,25 @@ export const authOptions: NextAuthOptions = {
   events: {
     async signIn({ user }) {
       await mergeLocalCartWithUserCart(user.email || "");
+    },
+  },
+  callbacks: {
+    async jwt({ token }) {
+      // fetch the user by the email on the token
+      const fetchedUser = await prisma.user.findFirst({
+        where: {
+          email: token.email || "",
+        },
+      });
+
+      // extend the token with fetchedUser.role
+      // Token can now be used in the middleware.ts to grand access or deny pages
+      token.role = fetchedUser?.role || "";
+
+      return token;
+    },
+    async session({ session }) {
+      return session;
     },
   },
   session: {

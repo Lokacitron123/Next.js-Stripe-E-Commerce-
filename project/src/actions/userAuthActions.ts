@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 import bcrypt from "bcrypt";
 
 type UserProps = {
-  username: string;
   email: string;
   password: string;
 };

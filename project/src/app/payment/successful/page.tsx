@@ -1,7 +1,6 @@
 "use client";
 
 import { verifyPayment } from "@/actions/stripeActions";
-import { getCart } from "@/actions/cartActions";
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
@@ -15,6 +14,8 @@ const SuccessfulpaymentPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const hinderDoubleRend = useRef(false);
   const [order, setOrder] = useState<Order | null>(null);
+
+  console.log("sessionID", sessionId);
 
   useEffect(() => {
     if (hinderDoubleRend.current === false) {
