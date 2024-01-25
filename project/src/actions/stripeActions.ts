@@ -59,11 +59,8 @@ export const verifyPayment = async (
 ): Promise<OrderInterface | null> => {
   try {
     const session = await stripe.checkout.sessions.retrieve(sessionId);
-    console.log("Logging session", session.customer, session.payment_status);
 
-    console.log("logging sessionId", sessionId);
     if (session.payment_status === "paid") {
-      console.log("inside of payment paid check");
       // find the user who paid by checking the logged in user's session
       try {
         const orderDetails = await createOrder(sessionId, session);
@@ -167,8 +164,6 @@ export const createOrder = async (
     throw new Error("Error creating order");
   }
 };
-
-export const reduceQuantityInDB = () => {};
 
 export const removeCartFromUserAfterPayment = async (userCart: any) => {
   try {
