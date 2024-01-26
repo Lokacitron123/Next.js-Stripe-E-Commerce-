@@ -1,8 +1,8 @@
 import ProductCard from "@/components/ProductCard/ProductCard";
 import prisma from "@/utils/db/prisma";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import AddVariant from "./AddVariantField";
+import BackTrackBtn from "@/components/BackTrackBtn/BackTrackBtn";
 
 interface SingleProductProps {
   params: {
@@ -21,15 +21,21 @@ const UpdateProductPage = async ({ params: { id } }: SingleProductProps) => {
   if (!product) notFound();
 
   return (
-    <div className='flex flex-row gap-1'>
-      <div className='w-1/3'>
-        <ProductCard product={product} />
+    <>
+      <div className='ml-6 '>
+        <BackTrackBtn />
       </div>
 
-      <div className='w-full'>
-        <AddVariant product={product} />
+      <div className='grid grid-cols-1 md:grid-cols-2'>
+        <div className=''>
+          <ProductCard product={product} />
+        </div>
+
+        <div className='w-full'>
+          <AddVariant product={product} />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

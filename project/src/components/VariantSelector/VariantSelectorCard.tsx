@@ -27,17 +27,17 @@ const VariantSelectorCard = ({ product }: ProductProps) => {
 
   return (
     <div>
-      <div className='flex flex-col'>
-        <Image
-          src={selectedVariant ? selectedVariant.image : product.defaultImg}
-          alt={product.name}
-          width={500}
-          height={500}
-          className='rounded-lg'
-        />
+      <div className='flex flex-col md:flex-row justify-center'>
         <div className='card-body'>
+          <Image
+            src={selectedVariant ? selectedVariant.image : product.defaultImg}
+            alt={product.name}
+            width={400}
+            height={400}
+            className='rounded-lg'
+          />
           <h2 className='card-title'>{product.name}</h2>
-          <p className='text-balance'>{product.description}</p>
+          <p className='text-balance max-w-[500px]'>{product.description}</p>
           <p>{product.price} kr</p>
           {selectedVariant ? (
             <p>Quantity: {`${selectedVariant.quantity}`}</p>
@@ -64,15 +64,14 @@ const VariantSelectorCard = ({ product }: ProductProps) => {
               </option>
             ))}
           </select>
-          <div>{selectedVariant?.quantity}</div>
+          <AddToCartBtn
+            productId={product.id}
+            selectedVariant={selectedVariant!}
+            incrementProductQuantityInCart={incrementProductQuantityInCart}
+            disabled={!variantSelected}
+          />
         </div>
       </div>
-      <AddToCartBtn
-        productId={product.id}
-        selectedVariant={selectedVariant!}
-        incrementProductQuantityInCart={incrementProductQuantityInCart}
-        disabled={!variantSelected}
-      />
     </div>
   );
 };

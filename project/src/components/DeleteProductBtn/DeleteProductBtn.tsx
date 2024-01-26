@@ -1,7 +1,7 @@
 "use client";
 
 import { startTransition, useTransition } from "react";
-
+import { FaRegTrashCan } from "react-icons/fa6";
 interface DeleteProductProp {
   productId: string;
   deleteProduct: (productId: string) => Promise<void>;
@@ -17,7 +17,7 @@ const DeleteProductBtn = ({ productId, deleteProduct }: DeleteProductProp) => {
         startTransition(async () => await deleteProduct(productId))
       }
     >
-      Delete Product
+      Delete <FaRegTrashCan />
     </button>
   );
 };

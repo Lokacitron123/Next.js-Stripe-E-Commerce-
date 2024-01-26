@@ -2,9 +2,7 @@ import prisma from "@/utils/db/prisma";
 import { Metadata } from "next";
 
 import { notFound } from "next/navigation";
-import { cache, useState } from "react";
-import AddToCartBtn from "@/components/AddToCartBtn/AddToCartBtn";
-import incrementProductQuantityInCart from "./actions";
+import { cache } from "react";
 import VariantSelectorCard from "@/components/VariantSelector/VariantSelectorCard";
 
 // Get id out of the URL with params

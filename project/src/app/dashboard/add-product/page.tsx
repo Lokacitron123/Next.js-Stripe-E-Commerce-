@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import prisma from "@/utils/db/prisma";
 import { redirect } from "next/navigation";
+
 // import functions
 
 // Metadata for this page

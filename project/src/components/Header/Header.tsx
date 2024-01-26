@@ -3,6 +3,7 @@ import Link from "next/link";
 import ShoppingCartBtn from "./ShoppingCartBtn";
 import { getCart } from "@/actions/cartActions";
 import UserBtn from "./UserBtn";
+import Links from "./Links";
 
 const searchProducts = async (formData: FormData) => {
   "use server";
@@ -18,17 +19,13 @@ const Header = async () => {
   const cart = await getCart();
 
   return (
-    <header className='bg-base-100'>
-      <nav className='navbar max-w-7xl m-auto flex-col sm:flex-row gap-2'>
+    <header className='bg-base-100 '>
+      <nav className='mt-5 m-auto max-w-7xl flex justify-between items-center flex-col mb-3 sm:flex-row gap-3'>
         <div className=' '>
           <Link href={"/"} className='font-bold btn btn-ghost text-xl'>
             E-SHOP LOGO
           </Link>
         </div>
-
-        <ul className='flex-none gap-2'>
-          <Link href={"/products"}>Produkter</Link>
-        </ul>
 
         <form action={searchProducts}>
           <div className='form-control'>
@@ -39,10 +36,12 @@ const Header = async () => {
             />
           </div>
         </form>
-
-        <ShoppingCartBtn cart={cart} />
-        <UserBtn />
+        <div className='flex min-w-[200px] gap-3 items-center justify-between '>
+          <ShoppingCartBtn cart={cart} />
+          <UserBtn />
+        </div>
       </nav>
+      <Links />
     </header>
   );
 };
