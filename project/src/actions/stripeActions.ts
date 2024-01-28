@@ -29,7 +29,7 @@ export const CreateCheckoutSession = async (
         currency: "sek",
         product_data: {
           name: `${cartItem.product.name} variant ${cartItem.selectedVariant.color}, size ${cartItem.selectedVariant.size}`,
-          description: cartItem.product.description,
+          description: cartItem.product.id,
           images: [cartItem.selectedVariant.image],
         },
         unit_amount: cartItem.product.price,
@@ -128,6 +128,7 @@ export const createOrder = async (
       name: cartItem.product.name,
       price: cartItem.product.price,
       quantity: cartItem.quantity,
+      productId: cartItem.productId,
       genderCategory: cartItem.product.genderCategory,
       productCategory: cartItem.product.productCategory,
       defaultImg: cartItem.selectedVariant.image,

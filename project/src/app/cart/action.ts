@@ -32,7 +32,6 @@ export const deleteProductInCart = async (
     if (variant) {
       // Increment the quantity of the Variant
 
-      console.log("variant found", variant.color, variant.quantity);
       await prisma.variant.update({
         where: {
           id: variant.id,

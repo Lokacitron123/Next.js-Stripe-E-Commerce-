@@ -12,8 +12,6 @@ type ProductProps = {
 const AddVariant = ({ product }: ProductProps) => {
   const [variantForms, setVariantForms] = useState<ReactNode[]>([]);
 
-  console.log("Logging product from AddVariantFieldComp", product);
-
   const addVariantForm = () => {
     setVariantForms([
       ...variantForms,
@@ -31,7 +29,7 @@ const AddVariant = ({ product }: ProductProps) => {
         <button className='btn btn-secondary' onClick={addVariantForm}>
           New Variant
         </button>
-        <button className='btn btn-info'>Save variants</button>
+        {/* <button className='btn btn-info'>Save variants</button> */}
       </div>
       <div>
         {variantForms.map((_, index) => (

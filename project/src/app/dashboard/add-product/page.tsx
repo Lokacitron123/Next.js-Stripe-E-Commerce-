@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import prisma from "@/utils/db/prisma";
 import { redirect } from "next/navigation";
+
 // import functions
 
 // Metadata for this page
@@ -82,7 +83,7 @@ const AddProductPage = () => {
         <textarea
           required
           name='description'
-          className='textarea textarea-bordered mb-3 w-full max-w-xs'
+          className='textarea textarea-bordered mb-3 w-full max-w-xs '
           placeholder='Product description'
         />
         <label htmlFor='image' className='label'>

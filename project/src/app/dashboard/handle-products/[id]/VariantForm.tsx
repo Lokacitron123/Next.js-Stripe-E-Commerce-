@@ -98,7 +98,7 @@ const VariantForm = ({ product, updateVariantFunction }: VariantFormProps) => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form className='flex flex-col' onSubmit={handleSubmit}>
         {/* Input for Image URL */}
         <label htmlFor='image' className='label'>
           Input an image URL
@@ -170,9 +170,10 @@ const VariantForm = ({ product, updateVariantFunction }: VariantFormProps) => {
         />
 
         {/* Submit button */}
-        <button type='submit' className='btn btn-primary'>
+        <button type='submit' className='btn btn-primary w-fit'>
           Add Variant
         </button>
+        <div className='divider w-fit' />
       </form>
     </div>
   );

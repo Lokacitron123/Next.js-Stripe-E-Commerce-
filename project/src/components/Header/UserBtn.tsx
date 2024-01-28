@@ -1,6 +1,5 @@
 "use client";
 
-import { Session } from "next-auth";
 import Image from "next/image";
 import { HiUser } from "react-icons/hi";
 import placeholderProfile from "@/assets/profile-pic-placeholder.png";
@@ -121,7 +120,6 @@ const UserBtn = () => {
             </>
           )}
         </ul>
-        <p>{user.data?.user?.email}</p>
       </div>
 
       {slideInForm && (
@@ -129,7 +127,7 @@ const UserBtn = () => {
           <div className='absolute top-0 right-0 h-full bg-slate-500 w-80  '>
             <div className='w-full p-4 flex justify-end'>
               <button className='btn btn-circle' onClick={closeSlideInForm}>
-                Close
+                X
               </button>
             </div>
             <ul className='menu bg-base-200 w-56 rounded-box m-auto'>
