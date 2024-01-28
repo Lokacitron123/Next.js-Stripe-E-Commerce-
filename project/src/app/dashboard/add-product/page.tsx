@@ -83,7 +83,7 @@ const AddProductPage = () => {
         <textarea
           required
           name='description'
-          className='textarea textarea-bordered mb-3 w-full max-w-xs'
+          className='textarea textarea-bordered mb-3 w-full max-w-xs '
           placeholder='Product description'
         />
         <label htmlFor='image' className='label'>

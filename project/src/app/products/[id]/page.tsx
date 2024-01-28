@@ -46,9 +46,12 @@ const SingleProductPage = async ({ params: { id } }: SingleProductProps) => {
   const product = await getProduct(id);
 
   return (
-    <div className='flex flex-col'>
-      <VariantSelectorCard product={product} />
-    </div>
+    <>
+      <div className='flex flex-col md:flex-row'>
+        <VariantSelectorCard product={product} />
+        <div className='flex  justify-center w-full'>reviews</div>
+      </div>
+    </>
   );
 };
 

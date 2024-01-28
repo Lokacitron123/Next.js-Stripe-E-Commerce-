@@ -1,48 +1,56 @@
+"use server";
+
 import prisma from "@/utils/db/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { revalidatePath } from "next/cache";
 
-type ReviewProps = {
-  comment: string;
-  rating: number;
-  userId: string;
-  productName: string;
-};
-
-export const createReview = async (reviewData: ReviewProps) => {
+export const createReview = async (formData: FormData) => {
   try {
     const user = await getServerSession(authOptions);
 
-    const userID = user?.user.id;
+    console.log("logging user", user);
+    const foundUser = await prisma.user.findUnique({
+      where: {
+        email: user?.user.email || "",
+      },
+    });
 
-    if (!userID) {
+    const userId = foundUser?.id;
+
+    console.log("logging userID", userId);
+
+    if (!userId) {
       console.log(user?.user.id);
       throw new Error("No user id available");
     }
 
-    if (!reviewData) {
-      throw new Error("Couldnt find review data");
+    if (!formData) {
+      throw new Error("Couldnt find form data");
     }
 
-    const productName = reviewData.productName;
+    const productName = formData.get("productName")?.toString();
+    const comment = formData.get("comment")?.toString() ?? "";
+    const rating = Number(formData.get("rating") || 0);
 
-    const hasBoughtProduct = await hasOrderedProduct(productName, userID);
-
-    if (!hasBoughtProduct) {
-      throw new Error("Could not find product in user's order history");
-    }
-
-    await prisma.review.create({
-      data: {
-        comment: reviewData.comment,
-        rating: reviewData.rating,
-        userId: reviewData.userId,
-        productId: reviewData.productName,
+    const product = await prisma.product.findFirst({
+      where: {
+        name: productName,
       },
     });
 
-    revalidatePath("/products/[id]", "page");
+    console.log("Found product by productName: ", product);
+
+    await prisma.review.create({
+      data: {
+        comment: comment,
+        rating: rating,
+        userId: userId,
+        productId: product?.id,
+      },
+    });
+
+    revalidatePath("/userdashboard");
   } catch (error: any) {
     console.error(error.message);
   }
@@ -58,23 +66,15 @@ export const getReviews = async () => {
   }
 };
 
-const hasOrderedProduct = async (productName: string, userId: string) => {
-  const userWithBoughtProduct = await prisma.user.findUnique({
+export const getOrders = async (userId: any) => {
+  const userOrders = await prisma.order.findMany({
     where: {
-      id: userId,
+      userId: userId,
     },
     include: {
-      Order: {
-        include: {
-          orderedProduct: {
-            where: {
-              name: productName,
-            },
-          },
-        },
-      },
+      orderedProduct: true,
     },
   });
 
-  return userWithBoughtProduct;
+  return userOrders;
 };
