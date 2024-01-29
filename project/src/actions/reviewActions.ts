@@ -56,10 +56,14 @@ export const createReview = async (formData: FormData) => {
   }
 };
 
-export const getReviews = async () => {
+export const getReviews = async (productId: string) => {
   try {
-    const allReviews = await prisma.review.findMany();
-    console.log(allReviews); // Do something with the retrieved reviews
+    const allReviews = await prisma.review.findMany({
+      where: {
+        id: productId,
+      },
+    });
+
     return allReviews;
   } catch (error) {
     console.error("Error fetching reviews:", error);

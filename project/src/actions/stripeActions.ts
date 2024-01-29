@@ -32,7 +32,7 @@ export const CreateCheckoutSession = async (
           description: cartItem.product.id,
           images: [cartItem.selectedVariant.image],
         },
-        unit_amount: cartItem.product.price,
+        unit_amount: cartItem.product.price * 100,
       },
       quantity: cartItem.quantity,
     }));
@@ -144,7 +144,7 @@ export const createOrder = async (
         orderedProduct: {
           create: orderedProductsData?.map((productData) => ({
             name: productData.name,
-            price: productData.price,
+            price: productData.price / 100,
             quantity: productData.quantity,
             genderCategory: productData.genderCategory,
             productCategory: productData.productCategory,

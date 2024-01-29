@@ -13,6 +13,8 @@ const AddReviewFormBtn: React.FC<SubmitReviewBtnProps> = ({
 }) => {
   const [showModal, setShowModal] = useState(false);
 
+  console.log("logging productId in frontend:", productName);
+
   const handleOpenModal = () => {
     setShowModal(true);
   };
@@ -44,7 +46,7 @@ const AddReviewFormBtn: React.FC<SubmitReviewBtnProps> = ({
               Submit Review for {productName}
             </h2>
             <form action={createReview}>
-              <input type='hidden' name={productName} value={productName} />
+              <input type='hidden' name='productName' value={productName} />
               <textarea
                 name='comment'
                 className='w-full h-32 border rounded-md p-2 mb-4 text-white'
