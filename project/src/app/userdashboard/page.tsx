@@ -8,7 +8,6 @@ const UserDashboard = async () => {
   const user = await getServerSession(authOptions);
   const userId = user?.user.id;
   const orders = await getOrders(userId);
-  const userReviews = await getReviews();
 
   return (
     <>

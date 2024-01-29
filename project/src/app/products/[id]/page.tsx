@@ -4,6 +4,8 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 import VariantSelectorCard from "@/components/VariantSelector/VariantSelectorCard";
+import ReviewCommentCard from "@/components/ReviewCommentCard.tsx/ReviewCommentCard";
+import { getReviews } from "@/actions/reviewActions";
 
 // Get id out of the URL with params
 interface SingleProductProps {
@@ -20,6 +22,7 @@ const getProduct = cache(async (id: string) => {
     where: { id },
     include: {
       variant: true,
+      review: true,
     },
   });
 
@@ -49,7 +52,11 @@ const SingleProductPage = async ({ params: { id } }: SingleProductProps) => {
     <>
       <div className='flex flex-col md:flex-row'>
         <VariantSelectorCard product={product} />
-        <div className='flex  justify-center w-full'>reviews</div>
+        <div className='flex flex-col justify-center items-center w-full'>
+          {product.review.map((item) => (
+            <ReviewCommentCard key={item.id} review={item} />
+          ))}
+        </div>
       </div>
     </>
   );

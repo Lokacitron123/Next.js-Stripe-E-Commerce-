@@ -1,17 +1,16 @@
 import ProductCard from "@/components/ProductCard/ProductCard";
 import prisma from "@/utils/db/prisma";
-import { Metadata } from "next";
-import Image from "next/image";
-import { notFound } from "next/navigation";
-import { cache } from "react";
 
 const ProductsPage = async () => {
   const products = await prisma.product.findMany({
     orderBy: { id: "desc" },
     include: {
       variant: true,
+      review: true,
     },
   });
+
+  console.log("Logging products  in page.tsx", products);
 
   return (
     <div className='flex flex-col items-center'>

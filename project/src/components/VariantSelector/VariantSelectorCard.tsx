@@ -25,6 +25,27 @@ const VariantSelectorCard = ({ product }: ProductProps) => {
     }
   };
 
+  function avarageRating() {
+    // Check if there are no reviews
+    if (product.review.length === 0) return <span>No rating</span>;
+
+    // Initialize total and count variables
+    var total = 0;
+    var count = 0;
+
+    // Iterate through each review and sum up the ratings
+    product.review.forEach(function (review) {
+      total += review.rating; // Assuming 'rating' is the property storing the rating value
+      count++;
+    });
+
+    // Calculate the average rating
+    var average = total / count;
+
+    // Round down to the nearest even number
+    return Math.floor(average / 2) * 2;
+  }
+
   return (
     <div>
       <div className='flex flex-col md:flex-row justify-center'>
@@ -37,6 +58,7 @@ const VariantSelectorCard = ({ product }: ProductProps) => {
             className='rounded-lg'
           />
           <h2 className='card-title'>{product.name}</h2>
+          <p>Rating: {avarageRating()}</p>
           <p className='text-balance max-w-[500px]'>{product.description}</p>
           <p>{product.price} kr</p>
           {selectedVariant ? (

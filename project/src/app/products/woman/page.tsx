@@ -13,6 +13,7 @@ const ProductsPage = async () => {
     orderBy: { id: "desc" },
     include: {
       variant: true,
+      review: true,
     },
   });
 
