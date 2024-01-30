@@ -50,9 +50,11 @@ const SingleProductPage = async ({ params: { id } }: SingleProductProps) => {
 
   return (
     <>
-      <div className='flex flex-col md:flex-row'>
+      <div className='flex justify-center  flex-col md:flex-row gap-5'>
         <VariantSelectorCard product={product} />
-        <div className='flex flex-col justify-center items-center w-full'>
+
+        <div className='flex flex-col items-center'>
+          <h2 className='mt-8'>Reviews</h2>
           {product.review.map((item) => (
             <ReviewCommentCard key={item.id} review={item} />
           ))}
