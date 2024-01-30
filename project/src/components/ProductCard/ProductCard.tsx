@@ -42,10 +42,10 @@ const ProductCard = ({ product }: ProductProps) => {
         />
         <h2 className='card-title'>{product.name}</h2>
         <p>
-          Rating: {avarageRating()} <span>({product.review.length})</span>
+          Avrage rating: {avarageRating()}{" "}
+          <span>({product.review.length})</span>
         </p>
 
-        <p>{product.description}</p>
         <p>{product.price} kr</p>
       </div>
     </Link>
