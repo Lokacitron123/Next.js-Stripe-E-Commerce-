@@ -15,6 +15,7 @@ const UpdateProductPage = async ({ params: { id } }: SingleProductProps) => {
     where: { id },
     include: {
       variant: true,
+      review: true,
     },
   });
 
