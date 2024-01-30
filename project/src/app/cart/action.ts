@@ -19,10 +19,6 @@ export const deleteProductInCart = async (
   );
 
   if (existingCartItem?.selectedVariant.quantity) {
-    console.log("running inside delete if");
-    console.log("logging existingCartItem quantity", existingCartItem.quantity);
-    console.log("logging existingCartItem id", existingCartItem.productId);
-
     const variant = await prisma.variant.findUnique({
       where: {
         id: existingCartItem.selectedVariant.id,
@@ -70,11 +66,24 @@ export const incrementSelectedVariantInCart = async (
   );
 
   if (existingCartItem?.selectedVariant.quantity) {
+    // Increment the quantity of the cartItem by 1
     await prisma.cartItem.update({
       where: {
         id: existingCartItem.id,
       },
       data: { quantity: { increment: 1 } },
+    });
+
+    // Decrement  the quantity of a product variant when increasing quanity of cartItem by 1
+    await prisma.variant.update({
+      where: {
+        id: existingCartItem.selectedVariant.id,
+      },
+      data: {
+        quantity: {
+          decrement: 1,
+        },
+      },
     });
   } else {
     console.log("couldnt update the quantity of selected product");
@@ -97,11 +106,24 @@ export const decreaseSelectedVariantInCart = async (
   );
 
   if (existingCartItem?.selectedVariant.quantity) {
+    // decrease the quantity of the cartItem by 1
     await prisma.cartItem.update({
       where: {
         id: existingCartItem.id,
       },
       data: { quantity: { decrement: 1 } },
+    });
+
+    // Increment back the quantity of a product variant when decreasing quanity of cartItem by 1
+    await prisma.variant.update({
+      where: {
+        id: existingCartItem.selectedVariant.id,
+      },
+      data: {
+        quantity: {
+          increment: 1,
+        },
+      },
     });
   } else {
     console.log("couldnt decrease the quantity of selected product");
