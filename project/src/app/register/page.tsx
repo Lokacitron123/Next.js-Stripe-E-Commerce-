@@ -1,64 +1,22 @@
 "use client";
 
-// failed implementing formData for registering a user
-// Therefor vent with a call to an api route
-// Due to being more used to this way of writing code
-
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { registerUser } from "@/actions/userActions";
+import RegisterUserBtn from "./RegisterBtn";
+import { useFormState } from "react-dom";
 
 const RegisterPage = () => {
-  const router = useRouter();
-  const [data, setData] = useState({
-    email: "",
-    password: "",
-  });
-  const [error, setError] = useState("");
-
-  const registerUser = async (event: React.FormEvent) => {
-    event.preventDefault();
-
-    try {
-      const response = await fetch("/api/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        const errorInfo = await response.json();
-        setError(errorInfo.error);
-
-        setData({
-          email: "",
-          password: "",
-        });
-
-        return; // Stop execution if there's an error
-      }
-
-      const userInfo = await response.json();
-      console.log(userInfo);
-
-      // If registration is successful, navigate to the login page
-      router.push("/login");
-    } catch (error) {
-      console.error("An error occurred:", error);
-      setError("An unexpected error occurred. Please try again."); // Update the error state}
-      setData({
-        email: "",
-        password: "",
-      });
-    }
-  };
+  const [state, formAction] = useFormState(registerUser, null);
 
   return (
     <div className='flex  items-center flex-col  '>
-      <h1 className='text-lg mb-3 font-bold'>Registrera användare</h1>
-      {error && <p className='text-red-500'>{error}</p>}
-      <form onSubmit={registerUser}>
+      <h1 className='text-lg mb-3 font-bold'>Register new user</h1>
+      {state?.success === false && ( // Render error message if success is false
+        <p className='text-red-400'>{state.message}</p>
+      )}
+      {state?.success && ( // Render success message if success is true
+        <p className='text-green-400'>{state.message}</p>
+      )}
+      <form action={formAction}>
         <label className='label' htmlFor='email'>
           Epost
         </label>
@@ -66,29 +24,21 @@ const RegisterPage = () => {
           className='input input-bordered w-full max-w-xs'
           type='email'
           name='email'
-          placeholder='Din epost...'
+          placeholder='Your email...'
           required
-          value={data.email}
-          onChange={(e) => {
-            setData({ ...data, email: e.target.value });
-          }}
         />
 
         <label className='label' htmlFor='password'>
-          Lösenord
+          Password
         </label>
         <input
           className='input input-bordered w-full max-w-xs'
           type='password'
           name='password'
           required
-          placeholder='Lösenord...'
-          value={data.password}
-          onChange={(e) => {
-            setData({ ...data, password: e.target.value });
-          }}
+          placeholder='Password...'
         />
-        <button className='btn btn-neutral w-fit mt-2'>Registrera</button>
+        <RegisterUserBtn />
       </form>
     </div>
   );
