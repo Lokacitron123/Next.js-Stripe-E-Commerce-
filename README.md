@@ -13,7 +13,7 @@ To run this project locally, follow these steps:
 1. Clone the repository:
 
    ```bash
-   git clone <repository-url>
+   git clone (https://github.com/Lokacitron123/Next.js-Stripe-E-Commerce-.git)
    ```
 
 2. Navigate into project 
