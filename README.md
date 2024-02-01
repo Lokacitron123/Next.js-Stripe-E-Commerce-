@@ -25,8 +25,7 @@ To run this project locally, follow these steps:
     ```bash
    npm install
    ```
-4. Upon completion
-   upon up one more terminal and run the prisma command to generate prisma
+4. Upon completion, opon up one more terminal and run the prisma command to generate prisma
     ```bash
    npx prisma generate
    ```
