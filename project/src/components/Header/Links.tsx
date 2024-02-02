@@ -22,7 +22,7 @@ const Links = () => {
           } md:h-full`}
         >
           <li>
-            <Link href={"/products"}>Produkter</Link>
+            <Link href={"/products"}>Products</Link>
           </li>
           <li>
             <Link href={"/products/men"}>Men</Link>

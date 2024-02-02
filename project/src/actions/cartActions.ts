@@ -1,8 +1,5 @@
 "use server";
-// This file contains functions that make operations on our database
-// Reason for we are not creating API routes is that with prisma we get it fetch requests inbuilt
-// One can still argue that it would be better to create API routes for conventions sake.
-
+// This file contains functions that make operations regarding cart logic
 import { Cart, CartItem, Prisma, User, Variant } from "@prisma/client";
 import prisma from "@/utils/db/prisma";
 import { cookies } from "next/dist/client/components/headers";
@@ -30,6 +27,7 @@ export type ShoppingCart = CartWithProducts & {
 export const getCart = async (): Promise<ShoppingCart | null> => {
   const session = await getServerSession(authOptions);
 
+  //declare an empty cart
   let cart: CartWithProducts | null = null;
 
   if (session) {
@@ -75,6 +73,7 @@ export const getCart = async (): Promise<ShoppingCart | null> => {
     return null;
   }
 
+  // spread cart and set total price and size
   return {
     ...cart,
     size: cart.items.reduce((acc, item) => acc + item.quantity, 0),
@@ -114,6 +113,7 @@ export const createCart = async (): Promise<ShoppingCart> => {
     cookies().set("cartInLocalStorageId", newCart.id);
   }
 
+  // return an empty cart
   return {
     ...newCart,
     items: [],
@@ -124,11 +124,7 @@ export const createCart = async (): Promise<ShoppingCart> => {
 
 // Merge localStorage cart with logged in user cart
 export const mergeLocalCartWithUserCart = async (userEmail: string) => {
-  // getting the userID
-
-  // find user with mail from session
-  // id is not returned by the session normally but we need it to identify the users cart
-  // Therefor we find it by finding the user first by email on the session
+  // find user with userEmail
   const user = await prisma.user.findUnique({
     where: {
       email: userEmail || "",
@@ -141,6 +137,7 @@ export const mergeLocalCartWithUserCart = async (userEmail: string) => {
 
   const cartInLocalStorageId = cookies().get("cartInLocalStorageId")?.value;
 
+  // check for cart in localStorage by its id
   const localCart = cartInLocalStorageId
     ? await prisma.cart.findUnique({
         where: { id: cartInLocalStorageId },
@@ -161,13 +158,13 @@ export const mergeLocalCartWithUserCart = async (userEmail: string) => {
   });
 
   // make transaction mutation
+  // lets use make several database mutations, but if something fails. everything will fail.
+  // Which leads to the mutations rolling back to the initial values.
   // documentation: https://www.prisma.io/docs/orm/prisma-client/queries/transactions
   await prisma.$transaction(async (tx) => {
     if (userCart) {
-      console.log("Merging with existing user cart");
       const mergedCartItems = mergeCartItems(localCart?.items, userCart.items);
 
-      console.log("Merged Cart Items:", mergedCartItems);
       await tx.cartItem.deleteMany({
         where: { cartId: userCart.id },
       });
@@ -181,7 +178,6 @@ export const mergeLocalCartWithUserCart = async (userEmail: string) => {
         })),
       });
     } else {
-      console.log("Creating new user cart");
       await tx.cart.create({
         data: {
           userId: user.id,
@@ -201,7 +197,7 @@ export const mergeLocalCartWithUserCart = async (userEmail: string) => {
     await tx.cart.delete({
       where: { id: localCart.id },
     });
-    console.log("End of Transaction");
+
     // Deleting the cookie with our cart information in local storage
     cookies().set("cartInLocalStorageId", "");
   });

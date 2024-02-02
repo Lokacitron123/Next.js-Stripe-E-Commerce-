@@ -2,20 +2,21 @@ import { Metadata } from "next";
 import prisma from "@/utils/db/prisma";
 import { redirect } from "next/navigation";
 
-// import functions
-
 // Metadata for this page
 export const metadata: Metadata = {
-  title: "Gladiators Apparel",
-  description: "Are you not entertained?",
+  title: "Johans E-Shop",
+  description: "Get going!",
 };
 
 // Server actions and forms
 // Documentation: https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations
 
+// server function declared in a server component
+// accepts formData object from "action" on the form
 export const addProduct = async (formData: FormData) => {
   "use server";
 
+  // Retrieves data from formData with .get
   const name = formData.get("name")?.toString();
   const description = formData.get("description")?.toString();
   const defaultImage = formData.get("defaultImage")?.toString() ?? "";

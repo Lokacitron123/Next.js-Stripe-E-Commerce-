@@ -10,12 +10,10 @@ const RegisterPage = () => {
   return (
     <div className='flex  items-center flex-col  '>
       <h1 className='text-lg mb-3 font-bold'>Register new user</h1>
-      {state?.success === false && ( // Render error message if success is false
+      {state?.success === false && (
         <p className='text-red-400'>{state.message}</p>
       )}
-      {state?.success && ( // Render success message if success is true
-        <p className='text-green-400'>{state.message}</p>
-      )}
+      {state?.success && <p className='text-green-400'>{state.message}</p>}
       <form action={formAction}>
         <label className='label' htmlFor='email'>
           Epost

@@ -23,7 +23,7 @@ const Header = async () => {
       <nav className='mt-5 m-auto max-w-7xl flex justify-between items-center flex-col mb-3 sm:flex-row gap-3'>
         <div className=' '>
           <Link href={"/"} className='font-bold btn btn-ghost text-xl'>
-            E-SHOP LOGO
+            Johans E-SHOP
           </Link>
         </div>
 

@@ -17,8 +17,7 @@ export const getUser = async (userID: string): Promise<User | null> => {
 
 export const registerUser = async (state: any, formData: FormData) => {
   try {
-    // Destructure data from the request body
-
+    // Destructure data from the formData
     const email = formData.get("email")?.toString();
     const password = formData.get("password")?.toString();
 

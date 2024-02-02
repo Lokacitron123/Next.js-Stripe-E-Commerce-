@@ -51,7 +51,7 @@ const SuccessfulpaymentPage = () => {
           <p>Here are your product details</p>
           <h2>Order Details</h2>
           <p>Order ID: {order.orderId}</p>
-          <p>Total Amount: {order.totalAmount}</p>
+          <p>Total Amount: {order.totalAmount / 100} kr</p>
           <p>{}</p>
         </div>
       ) : (
