@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 // server function declared in a server component
 // accepts formData object from "action" on the form
 export const addProduct = async (formData: FormData) => {
-  ("use server");
+  "use server";
 
   // Retrieves data from formData with .get
   const name = formData.get("name")?.toString();

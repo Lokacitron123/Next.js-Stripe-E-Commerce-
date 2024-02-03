@@ -5,11 +5,13 @@ import { getCart } from "@/actions/cartActions";
 import UserBtn from "./UserBtn";
 import Links from "./Links";
 
+// Adds search functionality
 const searchProducts = async (formData: FormData) => {
   "use server";
 
   const searchQuery = formData.get("searchQuery")?.toString();
 
+  // Adds the searchQuery to the url and redirected to the search page where the query is used
   if (searchQuery) {
     redirect("/search?query=" + searchQuery);
   }
