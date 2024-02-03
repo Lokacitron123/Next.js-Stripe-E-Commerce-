@@ -1,6 +1,6 @@
 "use client";
 
-import { startTransition, useTransition } from "react";
+import { useTransition } from "react";
 import { FaRegTrashCan } from "react-icons/fa6";
 interface DeleteProductProp {
   productId: string;

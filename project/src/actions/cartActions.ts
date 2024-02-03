@@ -1,4 +1,5 @@
 "use server";
+
 // This file contains functions that make operations regarding cart logic
 import { Cart, CartItem, Prisma, User, Variant } from "@prisma/client";
 import prisma from "@/utils/db/prisma";

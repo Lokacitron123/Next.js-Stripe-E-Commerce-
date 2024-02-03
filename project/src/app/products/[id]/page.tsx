@@ -5,7 +5,6 @@ import { notFound } from "next/navigation";
 import { cache } from "react";
 import VariantSelectorCard from "@/components/VariantSelector/VariantSelectorCard";
 import ReviewCommentCard from "@/components/ReviewCommentCard.tsx/ReviewCommentCard";
-import { getReviews } from "@/actions/reviewActions";
 
 // Get id out of the URL with params
 interface SingleProductProps {

@@ -1,11 +1,15 @@
 "use server";
 
-import prisma from "@/utils/db/prisma";
-import { User } from "@prisma/client";
-import bcrypt from "bcrypt";
-import { revalidatePath } from "next/cache";
+// This file contains functions related to user management such as user retrieval and registration.
 
+// Importing necessary modules and utilities
+import prisma from "@/utils/db/prisma"; // Importing Prisma for database operations
+import { User } from "@prisma/client"; // Importing User type from Prisma
+import bcrypt from "bcrypt"; // Importing bcrypt for password hashing
+
+// Function to retrieve a user based on user ID
 export const getUser = async (userID: string): Promise<User | null> => {
+  // Retrieving user information from the database
   const user = await prisma.user.findUnique({
     where: {
       id: userID,
@@ -15,13 +19,14 @@ export const getUser = async (userID: string): Promise<User | null> => {
   return user;
 };
 
+// Function to register a new user
 export const registerUser = async (state: any, formData: FormData) => {
   try {
-    // Destructure data from the formData
+    // Destructuring data from the formData
     const email = formData.get("email")?.toString();
     const password = formData.get("password")?.toString();
 
-    // Check if any field is missing
+    // Checking if any field is missing
     if (!email || !password) {
       return {
         success: false,
@@ -29,13 +34,14 @@ export const registerUser = async (state: any, formData: FormData) => {
       };
     }
 
-    // Check if a user with the given email already exists
+    // Checking if a user with the given email already exists
     const existOrNot = await prisma.user.findUnique({
       where: {
         email: email,
       },
     });
 
+    // If user already exists, return a failure message
     if (existOrNot) {
       return {
         success: false,
@@ -43,10 +49,10 @@ export const registerUser = async (state: any, formData: FormData) => {
       };
     }
 
-    // Hash the password
+    // Hashing the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create a new user
+    // Creating a new user in the database
     await prisma.user.create({
       data: {
         email: email,
@@ -54,15 +60,13 @@ export const registerUser = async (state: any, formData: FormData) => {
       },
     });
 
-    // Respond with the true
-
+    // Responding with a success message
     return {
       success: true,
       message: "User successfully registered",
     };
   } catch (error: any) {
-    // response with false
-
+    // Responding with a failure message in case of error
     return {
       success: false,
       error: "Please enter a valid email",

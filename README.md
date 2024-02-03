@@ -2,9 +2,10 @@
 
 ## Description
 
-This is an E-commerce application I have made as my exam project at Medieinstitutet, school of applied sciences. 
-What I have created is a an application that utilizes Next.js app router with the "server action" feature.
+This is an E-commerce application I have made as my exam project at Medieinstitutet, school of applied sciences.
+What I have created is a an application that utilizes Next.js app router with "server action" functionality, Prisma ORM , MongoDB, TailwindCSS and DaisyUI.
 
+Disclaimer: the UI is a work in progress.
 
 ## How to Run
 
@@ -16,22 +17,28 @@ To run this project locally, follow these steps:
    git clone (https://github.com/Lokacitron123/Next.js-Stripe-E-Commerce-.git)
    ```
 
-2. Navigate into project 
+   or download the zip
 
-    ```bash
+2. Navigate into project
+
+   ```bash
    cd project
    ```
+
 3. Run installation
-    ```bash
+   ```bash
    npm install
    ```
 4. Upon completion, opon up one more terminal and run the prisma command to generate prisma
-    ```bash
+
+   ```bash
    npx prisma generate
    ```
-   followed by
-   
-    ```bash
+
+   followed by in the other terminal
+
+   ```bash
    npm run dev
    ```
+
    to start the project.

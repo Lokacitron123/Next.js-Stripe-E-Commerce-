@@ -10,8 +10,8 @@ const envSchema = z.object({
   GOOGLE_CLIENT_SECRET: z.string().min(1),
   NEXTAUTH_URL: z.string().min(1),
   NEXTAUTH_SECRET: z.string().min(1),
-  PUBLIC_STRIPE_KEY: z.string().min(1),
-  STRIPE_SECRET_KEY: z.string().min(1),
+  NEXT_PUBLIC_STRIPE_KEY: z.string().min(1),
+  NEXT_STRIPE_SECRET_KEY: z.string().min(1),
   NEXT_PUBLIC_STRIPE_SUCCESS_URL: z.string().min(1),
   NEXT_PUBLIC_STRIPE_CANCEL_URL: z.string().min(1),
 

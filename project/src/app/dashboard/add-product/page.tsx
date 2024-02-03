@@ -1,12 +1,5 @@
-import { Metadata } from "next";
 import prisma from "@/utils/db/prisma";
 import { redirect } from "next/navigation";
-
-// Metadata for this page
-export const metadata: Metadata = {
-  title: "Johans E-Shop",
-  description: "Get going!",
-};
 
 // Server actions and forms
 // Documentation: https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations
@@ -14,7 +7,7 @@ export const metadata: Metadata = {
 // server function declared in a server component
 // accepts formData object from "action" on the form
 export const addProduct = async (formData: FormData) => {
-  "use server";
+  ("use server");
 
   // Retrieves data from formData with .get
   const name = formData.get("name")?.toString();
@@ -28,6 +21,7 @@ export const addProduct = async (formData: FormData) => {
   const color = formData.get("color")?.toString();
   const quantity = Number(formData.get("quantity") || 0);
 
+  // Check if required fields are missing
   if (!name || !description || !defaultImage || !price || !size || !color) {
     throw Error("Required fields are missing");
   }
@@ -61,6 +55,7 @@ export const addProduct = async (formData: FormData) => {
     },
   });
 
+  // Redirect the user to the products page after adding the product
   redirect("/products");
 };
 
