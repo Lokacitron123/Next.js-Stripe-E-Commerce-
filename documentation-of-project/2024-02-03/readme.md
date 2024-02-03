@@ -15,7 +15,7 @@ And finally, I have turned in the assaignment.
 ## Thoughts
 
 As I said in my presentation, the code is uneven in quality and there is some cleaning up to to do in terms of how I write my functions. Some of my functions declared
-directly inside of my server/client components which I think is bad practise for readability and reusability.
+directly inside of my server/client components which I think is bad practise for readability and reusability. I would have liked to use more of the logic used for mergeCart functionality throughout my application due to the prisma discord and docks suggestions that this is a good way for handling the creation of several models at the same time in a safer fashion than I have done most of the time.
 
 Regretfully, I did not build the UI I would have liked for this project but it is something I will work on as a side project. Still, I am happy with the result of this application. I have learned a lot in the progress of building this application and I am looking forward to learn more about Next.js the coming months.
 
