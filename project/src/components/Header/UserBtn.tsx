@@ -69,12 +69,16 @@ const UserBtn = () => {
             <HiUser />
           )}
         </label>
+
         <ul
           tabIndex={0}
           className='dropdown-content menu rounded-box menu-sm z-30 mt-3 w-52 bg-slate-400 p-2 gap-3'
         >
           {user.status === "authenticated" ? (
             <>
+              <p className='text-black text-center font-bold'>
+                {user.data.user.email}
+              </p>
               <li>
                 <Link
                   href={"/userdashboard"}
