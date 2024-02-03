@@ -2,10 +2,9 @@
 
 ## Description
 
-This is an E-commerce application I have made as my exam project at Medieinstitutet, school of applied sciences.
-What I have created is a an application that utilizes Next.js app router with "server action" functionality, Prisma ORM , MongoDB, TailwindCSS and DaisyUI.
+Welcome to my E-commerce application, developed as my exam project at Medieinstitutet, School of Applied Sciences. This project showcases an E-commerce platform built using Next.js app router with "server action" functionality, Prisma ORM, MongoDB, TailwindCSS, and DaisyUI.
 
-Disclaimer: the UI is a work in progress.
+Please note that the UI is still a work in progress, and improvements are ongoing.
 
 ## How to Run
 
@@ -29,16 +28,19 @@ To run this project locally, follow these steps:
    ```bash
    npm install
    ```
-4. Upon completion, opon up one more terminal and run the prisma command to generate prisma
+4. Generate Prisma Files:
+   Open a new terminal and run the following command to generate Prisma files:
 
    ```bash
    npx prisma generate
    ```
 
-   followed by in the other terminal
+5. Run the Application:
 
-   ```bash
-   npm run dev
-   ```
+In another terminal window, start the project:
 
-   to start the project.
+```bash
+npm run dev
+```
+
+This will initiate the application and you can access it locally in your web browser.
