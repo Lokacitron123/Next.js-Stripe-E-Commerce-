@@ -1,9 +1,5 @@
 import ProductCard from "@/components/ProductCard/ProductCard";
 import prisma from "@/utils/db/prisma";
-import { Metadata } from "next";
-import Image from "next/image";
-import { notFound } from "next/navigation";
-import { cache } from "react";
 
 const ProductsPage = async () => {
   const products = await prisma.product.findMany({

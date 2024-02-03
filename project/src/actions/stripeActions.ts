@@ -1,14 +1,19 @@
 "use server";
 
+// This file contains functions related to managing checkout sessions, payments, and orders.
+
+// Importing necessary modules and utilities
 import { CartWithProducts } from "@/actions/cartActions";
 import Stripe from "stripe";
 import prisma from "@/utils/db/prisma";
 import { env } from "@/utils/env";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"; //
 
-const stripe = new Stripe(env.STRIPE_SECRET_KEY);
+// Initializing Stripe with the secret key
+const stripe = new Stripe(env.NEXT_STRIPE_SECRET_KEY);
 
+// Interface defining the structure of an order
 interface OrderInterface {
   id: string;
   orderId: string;
@@ -19,11 +24,13 @@ interface OrderInterface {
   userId: string;
 }
 
+// Function to create a checkout session for the provided cart and user email
 export const CreateCheckoutSession = async (
   cart: CartWithProducts | null,
   userEmail: string
 ) => {
   try {
+    // Mapping cart items to line items compatible with Stripe
     const lineItems = cart?.items.map((cartItem) => ({
       price_data: {
         currency: "sek",
@@ -37,6 +44,7 @@ export const CreateCheckoutSession = async (
       quantity: cartItem.quantity,
     }));
 
+    // Creating a new checkout session with Stripe
     const session = await stripe.checkout.sessions.create({
       line_items: lineItems,
       mode: "payment",
@@ -54,41 +62,41 @@ export const CreateCheckoutSession = async (
   }
 };
 
+// Function to verify payment based on the provided session ID
 export const verifyPayment = async (
   sessionId: string
 ): Promise<OrderInterface | null> => {
   try {
+    // Retrieving session details from Stripe
     const session = await stripe.checkout.sessions.retrieve(sessionId);
 
+    // Checking if the payment status is 'paid'
     if (session.payment_status === "paid") {
-      // find the user who paid by checking the logged in user's session
+      // Creating an order based on the session details
       try {
         const orderDetails = await createOrder(sessionId, session);
-        // returning the order from createOrder
         return orderDetails;
       } catch (userError) {
-        console.error("Error creating order:", userError);
         throw new Error("Error creating order");
       }
     } else {
-      console.log("Payment not successful");
       return null;
     }
   } catch (error) {
-    console.error("Error in verifyPayment:", error);
     throw new Error("Error in verifyPayment");
   }
 };
 
+// Function to create an order based on the provided session ID and session details
 export const createOrder = async (
   sessionId: string,
   session: Stripe.Response<Stripe.Checkout.Session>
 ) => {
   try {
+    // Retrieving user session
     const user = await getServerSession(authOptions);
 
-    // Check if an order with the same sessionId already exists
-    // To prevent the order from being recreated
+    // Checking if an order with the same sessionId already exists
     const existingOrder = await prisma.order.findUnique({
       where: {
         orderId: sessionId,
@@ -98,18 +106,19 @@ export const createOrder = async (
       },
     });
 
-    // Sends the order if already existing back to the frontend
-    // preventing a duplication of the same order
+    // Sending the existing order back to the frontend if found
     if (existingOrder) {
       return existingOrder;
     }
 
+    // Retrieving user information based on session
     const userWithID = await prisma.user.findUnique({
       where: {
         email: user?.user.email || "",
       },
     });
 
+    // Retrieving user's cart with items
     const userCart = await prisma.cart.findFirst({
       where: {
         userId: userWithID?.id,
@@ -124,6 +133,7 @@ export const createOrder = async (
       },
     });
 
+    // Mapping cart items to ordered product data
     const orderedProductsData = userCart?.items.map((cartItem: any) => ({
       name: cartItem.product.name,
       price: cartItem.product.price,
@@ -135,6 +145,7 @@ export const createOrder = async (
       orderId: sessionId,
     }));
 
+    // Creating a new order in the database
     const newOrder = await prisma.order.create({
       data: {
         orderId: sessionId,
@@ -154,27 +165,28 @@ export const createOrder = async (
       },
     });
 
+    // If the order and user's cart exist, delete the cart after payment
     if (newOrder && userCart) {
       await removeCartFromUserAfterPayment(userCart);
     }
 
-    // Returning newOrder
+    // Returning the new order
     return newOrder;
   } catch (error) {
-    console.error("Error creating order:", error);
     throw new Error("Error creating order");
   }
 };
 
+// Function to remove a user's cart after payment
 export const removeCartFromUserAfterPayment = async (userCart: any) => {
   try {
+    // Deleting the user's cart from the database
     await prisma.cart.delete({
       where: {
         id: userCart.id,
       },
     });
   } catch (error) {
-    console.error("Error deleting cart:", error);
     return new Error("Could not delete cart");
   }
 };

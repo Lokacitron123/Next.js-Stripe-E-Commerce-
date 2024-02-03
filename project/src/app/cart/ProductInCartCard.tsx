@@ -27,6 +27,8 @@ const ProductInCartCard = ({
     setLocalQuantity(quantity);
   }, [quantity]);
 
+  // startTransition is used for handling loading and state when combined with server actions inside of onClick
+
   return (
     <div className='m-w-1/2 flex flex-col md:flex-row'>
       <div className='card w-96 bg-base-100 shadow-xl'>

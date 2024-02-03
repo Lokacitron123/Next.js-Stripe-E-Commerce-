@@ -20,7 +20,9 @@ const UserDashboard = async () => {
         {orders.map((order) => (
           <div key={order.id} className='bg-white shadow-md rounded-md p-4'>
             <h3 className='text-lg font-semibold mb-2'>Order ID: {order.id}</h3>
-            <p className='text-sm mb-2'>Total amount: {order.totalAmount}</p>
+            <p className='text-sm mb-2'>
+              Total amount: {order.totalAmount / 100} kr
+            </p>
             <p className='text-sm mb-2'>status: {order.status}</p>
             <p>userID: {order.userId}</p>
             <ul>

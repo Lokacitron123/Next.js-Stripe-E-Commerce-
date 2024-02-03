@@ -14,7 +14,7 @@ interface AddToCartButtonProps {
 }
 
 // Docs for useTransition and server actions: https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations
-
+// startTransition is used inside of client components when you want to invoke server actions on onClick/onChange
 const AddToCartBtn = ({
   productId,
   selectedVariant,

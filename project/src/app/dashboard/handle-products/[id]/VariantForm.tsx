@@ -19,7 +19,9 @@ export type NewVariantProps = {
   quantity: number;
 };
 
+// Define the VariantForm component for adding a new variant
 const VariantForm = ({ product, updateVariantFunction }: VariantFormProps) => {
+  // Define state to manage the new variant details
   const [newVariant, setNewVariant] = useState<NewVariantProps>({
     image: "",
     color: "",
@@ -27,6 +29,7 @@ const VariantForm = ({ product, updateVariantFunction }: VariantFormProps) => {
     quantity: 0,
   });
 
+  // Function to handle input change events for text fields
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -38,6 +41,7 @@ const VariantForm = ({ product, updateVariantFunction }: VariantFormProps) => {
     }));
   };
 
+  // Function to handle input change events for select fields
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = event.target;
 
@@ -47,11 +51,15 @@ const VariantForm = ({ product, updateVariantFunction }: VariantFormProps) => {
     }));
   };
 
+  // Function to handle input change events for quantity field
   const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     const parsedValue = parseInt(value, 10);
 
+    // Check if the parsed value is a valid number
     if (!isNaN(parsedValue)) {
+      // Update the newVariant state by replacing the previous variant with a new one
+      // where the specified name property (e.g., quantity) is set to the parsedValue
       setNewVariant((prevVariant) => ({
         ...prevVariant,
         [name]: parsedValue,
@@ -59,6 +67,7 @@ const VariantForm = ({ product, updateVariantFunction }: VariantFormProps) => {
     }
   };
 
+  // Function to handle form submission
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -93,6 +102,7 @@ const VariantForm = ({ product, updateVariantFunction }: VariantFormProps) => {
       newVariant,
     };
 
+    // Call the updateVariantFunction to update variant information
     updateVariantFunction(data);
   };
 
